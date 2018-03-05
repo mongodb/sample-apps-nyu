@@ -8,10 +8,22 @@ import java.util.List;
 import org.bson.Document;
 import org.junit.Test;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+
 
 public class FindWithScalarFieldsTest {
     
 	static String CONNECTION_STRING = "mongodb+srv://Test:Test987#@cluster0-jxlpi.mongodb.net/test";
+	
+	@Test
+	public void TestConnection() {		
+		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
+		try(MongoClient client = new MongoClient(clientUri))
+		{
+			assertNotNull(client);
+		}    
+	}
 	
 	@Test
 	public void TestSimpleEqualityMatch() {
