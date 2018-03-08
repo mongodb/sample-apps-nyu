@@ -23,10 +23,10 @@ import static com.mongodb.client.model.Projections.excludeId;
 public class ArrayQuery {
 	public static void main(String[] args)
 	{
-		System.out.println("hello");
+	/*  System.out.println("hello");
 		List<Document> res;
 		String CONNECTION = "mongodb+srv://m001-student:student123#@sandbox-trhqa.mongodb.net/test";
-		/*		   
+				   
 		List<Document> res =InOperator(CONNECTION,cities);
 		System.out.println(res.size());
 		for(int i =0; i<res.size(); i++)
@@ -41,7 +41,7 @@ public class ArrayQuery {
 	 * @param cities: array of Shipping address cities to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> InOperator(String connectionString, String[] cities)
+	public static List<Document> GetShippingByCity(String connectionString, String[] cities)
 	{
 		System.out.println("entered");
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
@@ -67,7 +67,7 @@ public class ArrayQuery {
 	 * @param items: array of items to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public List<Document> AllOperator(String connectionString,String[] items)
+	public List<Document> GetShippingByItem(String connectionString,String[] items)
 	{
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
@@ -91,7 +91,7 @@ public class ArrayQuery {
 	 * @param status: string value of status to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> ArrayEqualityOperator(String connectionString, String status)
+	public static List<Document> FindByStatus(String connectionString, String status)
 	{
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
@@ -119,7 +119,7 @@ public class ArrayQuery {
 	 * @param quantity: integer value to filter documents that greater than this value.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public List<Document> ElemMatchOperator(String connectionString, String item_name, int quantity)
+	public List<Document> FindByItemQuantity(String connectionString, String item_name, int quantity)
 	{
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);

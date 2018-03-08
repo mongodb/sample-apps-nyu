@@ -29,12 +29,12 @@ public class ArrayQueryTest {
 		}    
 	}
 	@Test
-	public void InOperatorTest() {
+	public void ShippingByCityTest() {
 		
 		ArrayQuery arrayQuery = new ArrayQuery();		
 		String[] cities = {"Floris", "Calpine","Orason", "Allentown"};
 	  
-		List<Document> filteredDocuments = arrayQuery.InOperator(CONNECTION,cities);
+		List<Document> filteredDocuments = arrayQuery.GetShippingByCity(CONNECTION,cities);
 	    
 	    //verify size
 	    assertEquals(4, filteredDocuments.size());	
@@ -46,11 +46,11 @@ public class ArrayQueryTest {
 	    
 	}
 	@Test
-	public void AllOperatorTest() {
+	public void ShippingByItemTest() {
 		ArrayQuery arrayQuery = new ArrayQuery();		
 		String[] items = {"omak 2 Door Mobile Cabinet","Glue Sticks"};
 	   
-		List<Document> filteredDocuments = arrayQuery.AllOperator(CONNECTION,items);
+		List<Document> filteredDocuments = arrayQuery.GetShippingByItem(CONNECTION,items);
 	    
 	    //verify size
 	    assertEquals(1, filteredDocuments.size());	
@@ -62,11 +62,11 @@ public class ArrayQueryTest {
 	
 	}
 	@Test
-	public void ArrayEqualityTest() {
+	public void FindByStatusTest() {
 	ArrayQuery arrayQuery = new ArrayQuery();		
 		String status = "shipped";
 	   
-		List<Document> filteredDocuments = arrayQuery.ArrayEqualityOperator(CONNECTION,status);
+		List<Document> filteredDocuments = arrayQuery.FindByStatus(CONNECTION,status);
 	    
 	    //verify size
 	    assertEquals(38, filteredDocuments.size());	
@@ -83,7 +83,7 @@ public class ArrayQueryTest {
 		String item = "Glue Sticks";
 		int quantity = 30;
 	   
-		List<Document> filteredDocuments = arrayQuery.ElemMatchOperator(CONNECTION,item, quantity);
+		List<Document> filteredDocuments = arrayQuery.FindByItemQuantity(CONNECTION,item, quantity);
 	    //collection.find(elemMatch("lineitems",and(eq("name","Glue Sticks"),gt("quantity",30))))
 	    //verify size
 	    assertEquals(3, filteredDocuments.size());	
