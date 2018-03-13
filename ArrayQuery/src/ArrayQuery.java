@@ -24,13 +24,27 @@ public class ArrayQuery {
 	/*  public static void main(String[] args)
 	{
 	System.out.println("hello");
-		List<Document> res;
+		//List<Document> res;
 		String CONNECTION = "mongodb+srv://m001-student:student123#@sandbox-trhqa.mongodb.net/test";
+		//String[] cities = {"Floris", "Calpine","Orason", "Allentown"};
+		String[] cities = {};
 				   
-		List<Document> res =InOperator(CONNECTION,cities);
-		System.out.println(res.size());
-		for(int i =0; i<res.size(); i++)
-		System.out.println(res.get(i));
+		List<Document> res =GetShippingByCity(CONNECTION,cities);
+		//System.out.println(res.size());
+		
+		if(res.size()==0)
+		{System.out.println("error");
+		
+		}
+		else
+			{
+			for(int i =0; i<res.size(); i++)
+			
+		{
+			
+			System.out.println(res.get(i));
+		}
+			}
 		
 	}*/
 	
@@ -43,11 +57,12 @@ public class ArrayQuery {
 	 */
 	public static List<Document> GetShippingByCity(String connectionString, String[] cities)
 	{
-		System.out.println("entered");
+		System.out.println("cities"+cities.length);
+		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-		
+			
 			MongoDatabase database = client.getDatabase("stores");
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
@@ -55,6 +70,12 @@ public class ArrayQuery {
 					.projection(fields(include("subtotal","shipping","shippingAddress.city")))
 					.into(new ArrayList<Document>());
 			
+			if(cities.length==0)
+			{
+				System.out.println("NULL");
+				return null;
+			}
+			else
 			return queryResult;
 		}
 		catch (Exception e) {
