@@ -30,7 +30,7 @@ public class FindWithScalarFields {
 	 * @param postalcode: Shipping address postal code to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public List<Document> SimpleEqualityMatch(String connectionString, int postalcode){
+	public List<Document> GetOrdersByPostalCode(String connectionString, int postalcode){
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -63,7 +63,7 @@ public class FindWithScalarFields {
 	 * @param total: Order total to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public List<Document> MultipleFieldsEqualityMatch(String connectionString, int postalcode, Double total){
+	public List<Document> GetOrdersByPostalCodeAndTotal(String connectionString, int postalcode, Double total){
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -98,7 +98,7 @@ public class FindWithScalarFields {
 	 * @param upperBoundTotal: Upper bound for Order total to filter documents.
 	 * @return List<Document>: ArrayList of matching documents
 	 */
-	public List<Document> RangeQueryOnNumber(String connectionString, Double lowerBoundTotal, Double upperBoundTotal ){
+	public List<Document> GetOrdersInRangeOfTotal(String connectionString, Double lowerBoundTotal, Double upperBoundTotal ){
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -138,7 +138,7 @@ public class FindWithScalarFields {
 	 * @param endDate: Upper bound for order placed date to filter documents.
 	 * @return List<Document>: ArrayList of matching documents
 	 */
-	public List<Document> RangeQueryByDate(String connectionString, Date startDate, Date endDate){
+	public List<Document> GetOrdersBetweenDates(String connectionString, Date startDate, Date endDate){
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
