@@ -57,30 +57,37 @@ public class ArrayQuery {
 	 */
 	public static List<Document> GetShippingByCity(String connectionString, String[] cities)
 	{
-		System.out.println("cities"+cities.length);
+		//System.out.println("cities"+cities.length);
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-			
-			MongoDatabase database = client.getDatabase("stores");
-			MongoCollection<Document> collection = database.getCollection("orders");		
-			
-			List<Document> queryResult = collection.find(in("shippingAddress.city",cities))
-					.projection(fields(include("subtotal","shipping","shippingAddress.city")))
-					.into(new ArrayList<Document>());
-			
-			if(cities.length==0)
+			if(connectionString == null || connectionString.isEmpty() || cities.length<=0)
 			{
-				System.out.println("NULL");
-				return null;
+				throw new IllegalArgumentException();
 			}
 			else
-			return queryResult;
+			{
+				MongoDatabase database = client.getDatabase("stores");
+				MongoCollection<Document> collection = database.getCollection("orders");		
+				
+				List<Document> queryResult = collection.find(in("shippingAddress.city",cities))
+						.projection(fields(include("subtotal","shipping","shippingAddress.city")))
+						.into(new ArrayList<Document>());
+				
+				
+				
+				return queryResult;
+			}
 		}
 		catch (Exception e) {
 			//log the exception
-			return null;
+			
+				System.out.println("An exception occured");
+				System.out.println("Details:");
+				System.out.println(e.getStackTrace());
+				return null;
+							
 		}		
 	}
 	/**
@@ -95,18 +102,31 @@ public class ArrayQuery {
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-			MongoDatabase database = client.getDatabase("stores");
-			MongoCollection<Document> collection = database.getCollection("orders");		
+			if(connectionString == null || connectionString.isEmpty() || items.equals(null) ||items.length<=0)
+			{
+				throw new IllegalArgumentException();
+			}
+			else
+			{
+				MongoDatabase database = client.getDatabase("stores");
+				MongoCollection<Document> collection = database.getCollection("orders");		
 		
-			List<Document> queryResult = collection.find(all("lineitems.name",items))
+				List<Document> queryResult = collection.find(all("lineitems.name",items))
 					.projection(fields(include("subtotal","lineitems.name","shippingAddress.city")))
 					.into(new ArrayList<Document>());
-			return queryResult;
+			
+				return queryResult;
+			}
 		}
 		catch (Exception e) {
 			//log the exception
-			return null;
-		}
+			
+				System.out.println("An exception occured");
+				System.out.println("Details:");
+				System.out.println(e.getStackTrace());
+				return null;
+							
+		}		
 	}
 	
 	/**
@@ -121,18 +141,31 @@ public class ArrayQuery {
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-			MongoDatabase database = client.getDatabase("stores");
-			MongoCollection<Document> collection = database.getCollection("orders");		
+			if(connectionString == null || connectionString.isEmpty() || status==null|| status.isEmpty())
+			{
 			
-			List<Document> queryResult = collection.find(eq("status",status))
+				throw new IllegalArgumentException();
+			}
+			else
+			{
+				MongoDatabase database = client.getDatabase("stores");
+				MongoCollection<Document> collection = database.getCollection("orders");		
+			
+				List<Document> queryResult = collection.find(eq("status",status))
 					.into(new ArrayList<Document>());
 		  
-		return queryResult;
+				return queryResult;
+			}
 		}
 		catch (Exception e) {
 			//log the exception
-			return null;
-		}
+			
+				System.out.println("An exception occured");
+				System.out.println("Details:");
+				System.out.println(e.getStackTrace());
+				return null;
+							
+		}	
 	}
 	
 	
@@ -149,19 +182,31 @@ public class ArrayQuery {
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-			MongoDatabase database = client.getDatabase("stores");
-			MongoCollection<Document> collection = database.getCollection("orders");		
+			if(connectionString == null || connectionString.isEmpty() || item_name.isEmpty() || item_name ==null || quantity <0)
+			{
+				throw new IllegalArgumentException();
+			}
+			else
+			{
+				MongoDatabase database = client.getDatabase("stores");
+				MongoCollection<Document> collection = database.getCollection("orders");		
 			
-			List<Document> queryResult = collection.find(elemMatch("lineitems",and
+				List<Document> queryResult = collection.find(elemMatch("lineitems",and
 					(eq("name",item_name),gt("quantity",quantity))))
 					.into(new ArrayList<Document>());
 			
 			return queryResult;
+			}
 		}
 		catch (Exception e) {
 			//log the exception
-			return null;
-		}		
+			
+				System.out.println("An exception occured");
+				System.out.println("Details:");
+				System.out.println(e.getStackTrace());
+				return null;
+							
+		}			
 	}
 }
 
