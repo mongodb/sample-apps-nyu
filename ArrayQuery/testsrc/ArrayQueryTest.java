@@ -114,28 +114,14 @@ public class ArrayQueryTest {
 		//String status = "ordered";
 		List<Document> filteredDocuments = arrayQuery.FindByStatus(CONNECTION,status);
 	    
-		if(filteredDocuments==null)
-		{
-			
-			System.out.println("Empty Filter");
-			//assertEquals(0, filteredDocuments.size());	
-		}
-		else if(filteredDocuments.size()==0)
-		{
-			
-			System.out.println("No match found");
-			assertEquals(0, filteredDocuments.size());	
-		}	
-		else//verify size
-	    {//verify size
-			System.out.println("Found match");
+		//verify size
 			assertEquals(38, filteredDocuments.size());	
 		    
 		   //verify record
 		    Document result = filteredDocuments.get(0);
 		    String id = result.getString("_id");
 		    assertEquals("5a989e4af90b470f476a245b", id);
-	    }
+	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -164,37 +150,18 @@ public class ArrayQueryTest {
 	@Test
 	public void FindByItemQuantityTest() {
 		ArrayQuery arrayQuery = new ArrayQuery();		
-		//String item = "Glue Sticks";
-		//int quantity = 30;
-		String item = "Tape";
-		int quantity = 20;
+		String item = "Glue Sticks";
+		int quantity = 30;
 		List<Document> filteredDocuments = arrayQuery.FindByItemQuantity(CONNECTION,item, quantity);
 	    //collection.find(elemMatch("lineitems",and(eq("name","Glue Sticks"),gt("quantity",30))))
 	    //verify size
-		if(filteredDocuments==null)
-		{
-			
-			System.out.println("Empty Filter");
-			//assertEquals(0, filteredDocuments.size());	
-		}
-		else if(filteredDocuments.size()==0)
-		{
-			
-			System.out.println("No match found");
-			assertEquals(0, filteredDocuments.size());	
-		}
-		
-		else//verify size
-	    {
-			System.out.println("Found match");
 			assertEquals(3, filteredDocuments.size());	
-		    
-		    
+		    	    
 		   //verify record
 		    Document result = filteredDocuments.get(0);
 		    String id = result.getString("_id");
 		    assertEquals("5a989e4a3a654e2ac2387e7a", id);
-	    }
+	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

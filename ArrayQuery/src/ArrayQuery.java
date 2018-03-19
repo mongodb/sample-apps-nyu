@@ -182,7 +182,7 @@ public class ArrayQuery {
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
-			if(connectionString == null || connectionString.isEmpty() || item_name.isEmpty() || item_name ==null || quantity <0)
+			if(connectionString == null || connectionString.isEmpty() || item_name.isEmpty() || item_name ==null || quantity <=0)
 			{
 				throw new IllegalArgumentException();
 			}
@@ -195,6 +195,7 @@ public class ArrayQuery {
 					(eq("name",item_name),gt("quantity",quantity))))
 					.into(new ArrayList<Document>());
 			
+				System.out.println(queryResult);
 			return queryResult;
 			}
 		}
