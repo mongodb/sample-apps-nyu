@@ -72,8 +72,8 @@ public class FindWithScalarFields {
 	 * @param total: Order total to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public List<Document> GetOrdersByPostalCodeAndTotal(String connectionString, int postalcode, Double total){
-		if(connectionString == null || connectionString.isEmpty() || postalcode<0 || total<0)
+	public List<Document> GetOrdersByOrderPlacedDateAndPostalCode(String connectionString, Date orderPlacedDate,  int postalcode){
+		if(connectionString == null || connectionString.isEmpty() || postalcode<0 || orderPlacedDate == null)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -93,7 +93,7 @@ public class FindWithScalarFields {
 				//option 2  - create basicDBObject and append filters			
 				BasicDBObject filters = new BasicDBObject();
 				filters.append("shippingAddress.postalCode", postalcode);
-				filters.append("total", total);			
+				filters.append("orderPlaced", orderPlacedDate);			
 				List<Document> ordersFiltered = collection
 						.find(filters)
 						.into(new ArrayList<Document>());

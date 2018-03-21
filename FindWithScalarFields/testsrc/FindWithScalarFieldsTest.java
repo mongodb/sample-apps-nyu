@@ -61,9 +61,10 @@ public class FindWithScalarFieldsTest {
 	}
 			
 	@Test
-	public void GetOrdersByPostalCodeAndTotal_ValidArguments_SuccessWithRecords() {
+	public void GetOrdersByOrderPlacedDateAndPostalCode_ValidArguments_SuccessWithRecords() throws ParseException {
+		Date orderPlacedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("2018-01-16T19:00:00.000");
 		FindWithScalarFields findWithScalarFields = new FindWithScalarFields();		
-	    List<Document> filteredDocuments = findWithScalarFields.GetOrdersByPostalCodeAndTotal(CONNECTION_STRING,10190,1297.9081);
+	    List<Document> filteredDocuments = findWithScalarFields.GetOrdersByOrderPlacedDateAndPostalCode(CONNECTION_STRING,orderPlacedDate,70839);
 	    
 	    //verify size
 	    assertEquals(1, filteredDocuments.size());	
@@ -71,32 +72,35 @@ public class FindWithScalarFieldsTest {
 	    //verify record
 	    Document result = filteredDocuments.get(0);
 	    String id = result.getString("_id");
-	    assertEquals("5a989e4ac5fb0ab8c29ac345", id);
+	    assertEquals("5a989e4abc7ca02a896847a1", id);
 	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void GetOrdersByPostalCodeAndTotal_InvalidConnectionString_ThrowsException() {
+	public void GetOrdersByOrderPlacedDateAndPostalCode_InvalidConnectionString_ThrowsException() throws ParseException {
+		Date orderPlacedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("2018-01-16T19:00:00.000");
 		FindWithScalarFields findWithScalarFields = new FindWithScalarFields();		
-		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByPostalCodeAndTotal("",10190,1297.9081);	    
+		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByOrderPlacedDateAndPostalCode("",orderPlacedDate,70839);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void GetOrdersByPostalCodeAndTotal_InvalidPostalCode_ThrowsException() {
+	public void GetOrdersByOrderPlacedDateAndPostalCode_InvalidPostalCode_ThrowsException() throws ParseException {
+		Date orderPlacedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("2018-01-16T19:00:00.000");
 		FindWithScalarFields findWithScalarFields = new FindWithScalarFields();		
-		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByPostalCodeAndTotal(CONNECTION_STRING,-10190,1297.9081);	    
+		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByOrderPlacedDateAndPostalCode(CONNECTION_STRING,orderPlacedDate,-10190);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void GetOrdersByPostalCodeAndTotal_InvalidTotal_ThrowsException() {
+	public void GetOrdersByOrderPlacedDateAndPostalCode_InvalidOrderPlacedDate_ThrowsException() {
 		FindWithScalarFields findWithScalarFields = new FindWithScalarFields();		
-		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByPostalCodeAndTotal(CONNECTION_STRING,10190,-1297.9081);	    
+		List<Document> filteredDocuments = findWithScalarFields.GetOrdersByOrderPlacedDateAndPostalCode(CONNECTION_STRING,null,70839);	    
 	}
 	
 	@Test
-	public void GetOrdersByPostalCodeAndTotal_ValidArguments_SuccessWithNoRecords() {
+	public void GetOrdersByOrderPlacedDateAndPostalCode_ValidArguments_SuccessWithNoRecords() throws ParseException {
+		Date orderPlacedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("2018-01-16T19:00:00.000");
 		FindWithScalarFields findWithScalarFields = new FindWithScalarFields();		
-	    List<Document> filteredDocuments = findWithScalarFields.GetOrdersByPostalCodeAndTotal(CONNECTION_STRING,00001,10.10);
+	    List<Document> filteredDocuments = findWithScalarFields.GetOrdersByOrderPlacedDateAndPostalCode(CONNECTION_STRING,orderPlacedDate,70707);
 	    
 	    //verify size
 	    assertEquals(0, filteredDocuments.size());   
