@@ -1,6 +1,14 @@
 ### Array Query
 
-The collection **stores.orders** have the following form.
+
+
+This code simulates a portion of an e-commerce app.
+It provides examples of query operations on an array of nested documents using the db.collection.find() method. 
+ 
+
+
+The examples use the **stores.orders** collection that has the following form. 
+
 ```javascript
 {
   _id: ObjectId(),
@@ -50,7 +58,7 @@ The $all operator selects the documents where the value of a field is an array t
 The above query selects all documents in the *stores.orders* collection where the names of the lineitems filed is "omak 2 Door Mobile Cabinet" and "Glue Sticks".
 
 
-### FindByStatus - $eq Operator
+#### FindByStatus - $eq Operator
 ```javascript
 List<Document> queryResult = collection.find(eq("status",status));
 ```
@@ -58,7 +66,7 @@ The $eq operator matches documents where the value of a field equals the speci
 The above query selects all documents in the *stores.orders* collection where the status of the items equals "shipped". The field *status* is an array that contains the status such as “shipped”, “ordered”, “cancelled” and the date the status has changed. 
 
 
-### FindByItemQuantity - $elemMatch Operator
+#### FindByItemQuantity - $elemMatch Operator
 ```javascript
  List<Document> queryResult = collection.find(elemMatch("lineitems",and
                     (eq("name",item_name),gt("quantity",quantity)))) ;
