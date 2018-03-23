@@ -1,13 +1,15 @@
-### Array Query
+# MongoDB Java Driver Find Method with Scalar Fields
+This is a sample application that demonstrates MongoDB Java Driver's find within Array method. It has four methods:
+
+one that illustrates the use of the $in operator
+one that illustrates the use of the $all operator
+one that illustrates an equality match on an array field
+one that illustrates the use of the $elemMatch operator
 
 
-
-This code simulates a portion of an e-commerce app.
-It provides examples of query operations on an array of nested documents using the db.collection.find() method. 
+## Getting Started
+The sample application queries data from MongoDB Atlas free-tier cluster. The cluster contains stores.orders collection which mimics an e-commerce database. The general schema is as follows:
  
-
-
-The examples use the **stores.orders** collection that has the following form. 
 
 ```javascript
 {
@@ -38,7 +40,7 @@ The examples use the **stores.orders** collection that has the following form.
 ```
 
 
-#### GetShippingByCity - $in Operator
+- #### GetShippingByCity - $in Operator
 
 ```javascript
 List<Document> queryResult = collection.find(in("shippingAddress.city",cities));
@@ -49,7 +51,7 @@ The above query selects all documents in the *stores.orders* collection where 
 If the field *shippingAddress.city* has more than one value, then the $in operator selects all the documents that contains at least one element that matches a value in the *cities* array.
 
 
-#### GetShippingByItem - $all Operator
+- #### GetShippingByItem - $all Operator
 
 ```javascript
 List<Document> queryResult = collection.find(all("lineitems.name",items));
@@ -58,7 +60,7 @@ The $all operator selects the documents where the value of a field is an array t
 The above query selects all documents in the *stores.orders* collection where the names of the lineitems filed is "omak 2 Door Mobile Cabinet" and "Glue Sticks".
 
 
-#### FindByStatus - $eq Operator
+- #### FindByStatus - $eq Operator
 ```javascript
 List<Document> queryResult = collection.find(eq("status",status));
 ```
@@ -66,7 +68,7 @@ The $eq operator matches documents where the value of a field equals the speci
 The above query selects all documents in the *stores.orders* collection where the status of the items equals "shipped". The field *status* is an array that contains the status such as “shipped”, “ordered”, “cancelled” and the date the status has changed. 
 
 
-#### FindByItemQuantity - $elemMatch Operator
+- #### FindByItemQuantity - $elemMatch Operator
 ```javascript
  List<Document> queryResult = collection.find(elemMatch("lineitems",and
                     (eq("name",item_name),gt("quantity",quantity)))) ;
@@ -74,3 +76,6 @@ The above query selects all documents in the *stores.orders* collection where th
 
 The $elemMatch operator matches documents that contain an array field with at least one element that matches all the specified query criteria.
 The above query selects all documents in the *stores.orders* collection where the item is “Glue Sticks” and the quantity is greater than 30.
+
+
+## Running the test
