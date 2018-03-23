@@ -25,7 +25,7 @@ import static com.mongodb.client.model.Projections.excludeId;
 public class FindWithScalarFields {
 	
 	/**
-	 * Retrieves documents filtered by shipping address postal.
+	 * Retrieves documents filtered by shipping address postal code.
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
 	 * @param postalcode: Shipping address postal code to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
@@ -58,7 +58,7 @@ public class FindWithScalarFields {
 			}
 			catch (Exception e) {
 				System.out.println("Exception occured");
-				System.out.println("Deatils:");
+				System.out.println("Details:");
 				System.out.println(e.getStackTrace());
 				return null;
 			}	
@@ -66,7 +66,7 @@ public class FindWithScalarFields {
 	}
 	
 	/**
-	 * Retrieves documents filtered by shipping address postal code and total.
+	 * Retrieves documents filtered by order placed date and shipping address postal code.
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
 	 * @param postalcode: Shipping address postal code to filter documents.
 	 * @param total: Order total to filter documents.
@@ -102,7 +102,7 @@ public class FindWithScalarFields {
 			}
 			catch (Exception e) {
 				System.out.println("Exception occured");
-				System.out.println("Deatils:");
+				System.out.println("Details:");
 				System.out.println(e.getStackTrace());
 				return null;
 			}	
@@ -151,7 +151,7 @@ public class FindWithScalarFields {
 			}
 			catch (Exception e) {
 				System.out.println("Exception occured");
-				System.out.println("Deatils:");
+				System.out.println("Details:");
 				System.out.println(e.getStackTrace());
 				return null;
 			}	
@@ -198,7 +198,7 @@ public class FindWithScalarFields {
 			}
 			catch (Exception e) {
 				System.out.println("Exception occured");
-				System.out.println("Deatils:");
+				System.out.println("Details:");
 				System.out.println(e.getStackTrace());
 				return null;
 			}	
