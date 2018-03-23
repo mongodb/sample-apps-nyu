@@ -1,4 +1,4 @@
-# MongoDB Java Driver Find Method with Scalar Fields
+# MongoDB Java Driver Find Method within Arrays
 This is a sample application that demonstrates MongoDB Java Driver's find within Array method. It has four methods:
 
 one that illustrates the use of the $in operator
