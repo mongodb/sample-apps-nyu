@@ -84,7 +84,7 @@ public List<Document> GetOrdersByPostalCode(String connectionString, int postalc
 }
 ```
 
-Retrieves documents filtered by shipping address postal code.
+This method illustrates a simple equality match. It takes the **shipping address postal code** as the parameter and returns a list of orders where shipping address postal code matches the parameter.
 
 ### Equality match on two or more fields
 
@@ -127,7 +127,7 @@ public List<Document> GetOrdersByOrderPlacedDateAndPostalCode(String connectionS
 }
 ```
 
-Retrieves documents filtered by order placed date and shipping address postal code.
+This method illustrates an equality match on two or more fields. It takes **order placed date** and **shipping address postal code** as parameters and returns a list of only those orders that match both the parameters.
 
 ### Range query on a numeric field
 
@@ -175,7 +175,7 @@ public List<Document> GetOrdersInRangeOfTotal(String connectionString, Double lo
 }
 ```
 
-Retrieves documents where the order total is greater than the lower bound and, less than or equal to the upper bound.
+This method illustrates a range query on a numeric field. It takes the lower and upper limits of the order **total** as parameters. It returns a list of only those orders where the order **total** is greater than the lower limit and, less than or equal to the upper limit. Using projection, only select fields of an order such as **subtotal, shipping, tax** are returned. The **'_id'** field is explicitly excluded. 
 
 ### Range query by date
 
@@ -222,7 +222,7 @@ public List<Document> GetOrdersBetweenDates(String connectionString, Date startD
 
 ```
 
-Retrieves documents where the order placed date is between the start date and the end date.
+This method illustrates a range query by date. It takes the start and end dates of the **order placed date** as parameters. It returns a list of only those orders where the **order placed date** falls between the start and end dates. Using projection, only the order **total** field is returned and the '_id' field is explicitly excluded.
 
 ## Running the tests
 
