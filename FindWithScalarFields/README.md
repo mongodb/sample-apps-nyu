@@ -84,7 +84,7 @@ public List<Document> GetOrdersByPostalCode(String connectionString, int postalc
 }
 ```
 
-Description 1
+Retrieves documents filtered by shipping address postal code.
 
 ### Equality match on two or more fields
 
@@ -127,7 +127,7 @@ public List<Document> GetOrdersByOrderPlacedDateAndPostalCode(String connectionS
 }
 ```
 
-Description 2
+Retrieves documents filtered by order placed date and shipping address postal code.
 
 ### Range query on a numeric field
 
@@ -175,7 +175,7 @@ public List<Document> GetOrdersInRangeOfTotal(String connectionString, Double lo
 }
 ```
 
-Description 3
+Retrieves documents where the order total is greater than the lower bound and, less than or equal to the upper bound.
 
 ### Range query by date
 
@@ -222,6 +222,13 @@ public List<Document> GetOrdersBetweenDates(String connectionString, Date startD
 
 ```
 
-Description 4
+Retrieves documents where the order placed date is between the start date and the end date.
 
 ## Running the tests
+
+The unit test cases are written using JUnit 4 framework. You can find them here: 
+
+    .
+    ├── ...
+    ├── testsrc                    		       # Source folder for all unit tests
+    │   ├── FindWithScalarFieldsTest.java              # Source file for all unit tests
