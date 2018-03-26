@@ -113,7 +113,8 @@ The method illustrates the use of $elemMatch operator. The $elemMatch operator
 
 ## Running the test
 The unit test cases are written using JUnit 4 framework. You can find them here:
-   .
+
+    .
     ├── ...
-    ├── testsrc                    		       # Source folder for all unit tests
-    │   ├── ArrayQuerryTest.java              # Source file for all unit tests
+    ├── testsrc                    	# Source folder for all unit tests
+    │   ├── ArrayQueryTest.java        # Source file for all unit tests
