@@ -41,7 +41,7 @@ The sample application queries data from MongoDB Atlas free-tier cluster. The cl
 
 ## Description
 
-- #### GetShippingByCity - $in Operator
+### GetShippingByCity - $in Operator
 
 ```javascript
 public static List<Document> GetShippingByCity(String connectionString, String[] cities)
@@ -80,7 +80,7 @@ public static List<Document> GetShippingByCity(String connectionString, String[]
 This method illustrates the use of $in operator. The $in operator selects the documents where the value of a field equals any value in the specified array. This takes the name of the cities as the parameter and returns a list of orders from the *stores.orders* collection where the shipping address cities matches the parameter. 
 
 
-- #### GetShippingByItem - $all Operator
+### GetShippingByItem - $all Operator
 
 ```javascript
 List<Document> queryResult = collection.find(all("lineitems.name",items))
@@ -91,7 +91,7 @@ List<Document> queryResult = collection.find(all("lineitems.name",items))
 The method illustrates the use of $all operator. The $all operator selects the documents where the value of a field is an array that contains all the specified elements. This method takes the names of the line items as the parameter and returns a list of orders from the *stores.orders* collection where the names of the lineitems matches the parameter. 
 This method uses projection to only return items with fields such as subtotal, name of the item and city of the shipping address.
 
-- #### FindByStatus - $eq Operator
+### FindByStatus - $eq Operator
 ```javascript
 List<Document> queryResult = collection.find(eq("status",status))
 	    			.into(new ArrayList<Document>());
@@ -101,7 +101,7 @@ The method illustrates the use of $eq operator. The $eq operator matches docum
 The field *status* is an array that contains the date of status update as well as the following status: “shipped”, “ordered”, “cancelled”. 
 
 
-- #### FindByItemQuantity - $elemMatch Operator
+### FindByItemQuantity - $elemMatch Operator
 ```javascript
  List<Document> queryResult = collection.find(elemMatch("lineitems",and
                     (eq("name",item_name),gt("quantity",quantity))))
