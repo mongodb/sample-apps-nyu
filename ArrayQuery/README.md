@@ -1,10 +1,10 @@
 # MongoDB Java Driver Find Method within Arrays
 This is a sample application that demonstrates MongoDB Java Driver's find within Array method. It has four methods:
 
-one that illustrates the use of the $in operator
-one that illustrates the use of the $all operator
-one that illustrates an equality match on an array field
-one that illustrates the use of the $elemMatch operator
+- one that illustrates the use of the $in operator
+- one that illustrates the use of the $all operator
+- one that illustrates an equality match on an array field
+- one that illustrates the use of the $elemMatch operator
 
 
 ## Getting Started
