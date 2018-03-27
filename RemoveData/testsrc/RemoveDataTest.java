@@ -36,7 +36,7 @@ public class RemoveDataTest {
 		}    
 	}
 	
-	// Remove All Condition
+	// Remove All method with multiple conditions
 	@Test(expected=IllegalArgumentException.class)
 	public void RemoveAllCancelledOrders_InvalidConnectionString_ThrowsException() throws ParseException {
 		RemoveData removeData = new RemoveData();		
@@ -49,11 +49,10 @@ public class RemoveDataTest {
 		RemoveData removeData = new RemoveData();		
 		removeData.RemoveAllCancelledOrders(CONNECTION_STRING,null);
 	}
-	
-	
+		
 	@Test
 	public void RemoveAllCancelledOrders_ValidArguments_Success() throws ParseException {
-		
+		// Add 5 dummy documents to test the deletion method
 		Date thresholdDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("1900-01-16T19:00:00.000");
 		List<Document> documents = new ArrayList<Document>();
 		for(int i=1;i<=5;i++)
@@ -73,11 +72,11 @@ public class RemoveDataTest {
 		RemoveData removeData = new RemoveData();		
 	    long removedDocumentsCount = removeData.RemoveAllCancelledOrders(CONNECTION_STRING,thresholdDate);
 	    
-	    //verify size
+	    //verify if 5 documents were deleted
 	    assertEquals(5, removedDocumentsCount);	    
 	}
 	
-	// Remove One Condition	
+	// Remove one method with multiple conditions	
 	@Test(expected=IllegalArgumentException.class)
 	public void RemoveOneCancelledOrder_InvalidConnectionString_ThrowsException() throws ParseException {
 		RemoveData removeData = new RemoveData();		
@@ -94,7 +93,7 @@ public class RemoveDataTest {
 	@Test
 	public void RemoveOneCancelledOrder_ValidArguments_Success() throws ParseException {	
 		Date thresholdDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse("1905-01-16T19:00:00.000");
-		
+		//Add one dummy document to test deletion
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -106,7 +105,7 @@ public class RemoveDataTest {
 		RemoveData removeData = new RemoveData();
 	    long removedDocumentsCount = removeData.RemoveOneCancelledOrder(CONNECTION_STRING,thresholdDate);
 	    
-	    //verify size
+	    //verify if one record was deleted
 	    assertEquals(1, removedDocumentsCount);
 	}
 	
@@ -125,7 +124,7 @@ public class RemoveDataTest {
 			MongoDatabase database = client.getDatabase("stores");			
 			MongoCollection<Document> orginalCollection = database.getCollection("orders");
 			
-			//create copy of documents
+			//create copy of documents as backup
 			List<Document> allOrders = orginalCollection
 					.find(new Document())
 					.into(new ArrayList<Document>());
@@ -137,7 +136,7 @@ public class RemoveDataTest {
 		    //Assert deletion
 		    assertEquals(101, removedDocumentsCount);	 
 			
-			//Restore orders in original collection			
+			//Restore orders to original collection			
 			orginalCollection.insertMany(allOrders);
 			client.close();
 		}	       
@@ -158,7 +157,7 @@ public class RemoveDataTest {
 			MongoDatabase database = client.getDatabase("stores");			
 			MongoCollection<Document> orginalCollection = database.getCollection("orders");
 			
-			//create replica
+			//Create replica of original collection as backup
 			orginalCollection.aggregate(Arrays.asList(out("ordersTemp"))).forEach(printBlock);
 			
 			//drop the collection
@@ -170,7 +169,7 @@ public class RemoveDataTest {
 		    	    .into(new ArrayList<String>()).contains("orders");
 		    assertEquals(false, collectionExists);
 			
-			//rename replica to restore database			
+			//rename replica to restore original collection			
 			MongoCollection<Document> tempCollection = database.getCollection("ordersTemp");
 			tempCollection.renameCollection(new MongoNamespace("stores","orders"));
 			client.close();
