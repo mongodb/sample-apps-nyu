@@ -27,7 +27,13 @@ public class EmbeddedDocumentsQuery {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> SingleNestedFieldEqualityMatch(String connectionString, String city){
+	public List<Document> FindOrdersByCity(String connectionString, String city)
+	{
+		if(connectionString == null || connectionString.isEmpty() || city==null|| city.isEmpty())
+			{
+				throw new IllegalArgumentException();
+			}
+		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -40,8 +46,12 @@ public class EmbeddedDocumentsQuery {
 			
 			return queryQrders;
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			//log the exception
+	    	System.out.println("An exception occured");
+	        System.out.println("Details:");
+	        System.out.println(e.getStackTrace());
 			return null;
 		}		
 	}
@@ -55,7 +65,13 @@ public class EmbeddedDocumentsQuery {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> TwoNestedFieldsEqualityMatch(String connectionString, String state, String city){
+	public List<Document> FindOrdersByStateAndCity(String connectionString, String state, String city)
+	{
+        if(connectionString == null || connectionString.isEmpty() || state.isEmpty() || state ==null || city.isEmpty() || city ==null)
+        	{
+        		throw new IllegalArgumentException();
+        	}
+        
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
 		{
@@ -68,8 +84,12 @@ public class EmbeddedDocumentsQuery {
 			
 			return queryQrders;
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			//log the exception
+	    	System.out.println("An exception occured");
+	        System.out.println("Details:");
+	        System.out.println(e.getStackTrace());
 			return null;
 		}		
 	}
@@ -81,8 +101,12 @@ public class EmbeddedDocumentsQuery {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	 
-	public List<Document> OperatorNestedField(String connectionString, Double unit_price)
+	public List<Document> FindOrdersByUnitPrice(String connectionString, Double unit_price)
 	{
+		if(connectionString == null || connectionString.isEmpty() || unit_price < 0)
+			{
+				throw new IllegalArgumentException();
+			}
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
@@ -96,14 +120,30 @@ public class EmbeddedDocumentsQuery {
 			
 			return queryOrders;
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			//log the exception
+			System.out.println("Exception occured");
+			System.out.println("Deatils:");
+			System.out.println(e.getStackTrace());
 			return null;
 		}		
 	}
 	
-	public List<Document> NestedNonNestedEqualityMatch(String connectionString, String city, Double total)
+	/**
+	 * Retrieves documents filtered by lineitems - sku and postalcode.
+	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
+	 * @param postalcode: postalcode to filter documents.
+	 * @param sku: lineitems - sku to filter documents.
+	 * @return List<Document>: ArrayList of matching documents.
+	 */
+	
+	public List<Document> FindOrdersByPostalCodeAndSku(String connectionString, int postalcode, String sku)
 	{
+		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || sku ==null|| postalcode < 0)
+			{
+				throw new IllegalArgumentException();
+			}
 		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		try(MongoClient client = new MongoClient(clientUri))
@@ -112,16 +152,18 @@ public class EmbeddedDocumentsQuery {
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
 			List<Document> queryOrders = collection
-					.find(and(eq("shippingAddress.city",city),eq("total",total)))
+					.find(and(eq("shippingAddress.postalCode",postalCode),eq("lineitems.sku",sku)))
 					.into(new ArrayList<Document>());
 			
 			return queryOrders;
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			//log the exception
+			System.out.println("Exception occured");
+			System.out.println("Deatils:");
+			System.out.println(e.getStackTrace());
 			return null;
 		}		
 	}
 }
-	
-	
