@@ -34,10 +34,8 @@ public class InsertDataTest {
 		InsertData insertData = new InsertData();		
 		List<Document> AddDocuments = InsertData.AddOneOrder(CONNECTION);
 		List<Document> filteredDocuments = InsertData.CountOrderSize(CONNECTION);
-		
-	
-		assertEquals(101, filteredDocuments.size());	
-		    
+			
+		assertEquals(102, filteredDocuments.size());	
 	}
 
 	
@@ -48,6 +46,26 @@ public class InsertDataTest {
 		List<Document> AddDocuments = InsertData.AddOneOrder("");
 	    
 	}
+	
+	
+	@Test
+	public void AddOneOrderJsonTest() {
+		
+		InsertData insertData = new InsertData();		
+		List<Document> AddDocuments = InsertData.AddOneOrderJson(CONNECTION);
+		List<Document> filteredDocuments = InsertData.CountOrderSize(CONNECTION);
+		
+	
+		assertEquals(101, filteredDocuments.size());	
+	}
+
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void AddOneOrderJsonTest_InvalidConnectionString_ThrowsException() 
+	{
+		InsertData insertData = new InsertData();		
+		List<Document> AddDocuments = InsertData.AddOneOrder("");
+	    
+	}
 		
 }	
-
