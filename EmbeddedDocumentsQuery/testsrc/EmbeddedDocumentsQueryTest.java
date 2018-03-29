@@ -114,7 +114,7 @@ public class EmbeddedDocumentsQueryTest
 	@Test
 	public void FindOrdersByUnitPriceTest() {
 		EmbeddedDocumentsQuery embeddedDocumentsQuery = new EmbeddedDocumentsQuery();		
-	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,95.00);
+	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,99.9);
 	    
 	    //verify size
 	    assertEquals(1, filteredDocuments.size());	
@@ -130,21 +130,21 @@ public class EmbeddedDocumentsQueryTest
 	public void FindOrdersByUnitPrice_InvalidConnectionString_ThrowsException() 
 	{
 		EmbeddedDocumentsQuery embeddedDocumentsQuery = new EmbeddedDocumentsQuery();		
-	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice("",95.00);	    
+	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice("",99.9);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void FindOrdersByUnitPrice_InvalidUnitPrice_ThrowsException() 
 	{
 		EmbeddedDocumentsQuery embeddedDocumentsQuery = new EmbeddedDocumentsQuery();		
-	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,-95.00);	    
+	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,-99.9);	    
 	}	
 	
 	@Test
 	public void FindOrdersByUnitPrice_ValidArguments_SuccessWithNoRecords() 
 	{
 		EmbeddedDocumentsQuery embeddedDocumentsQuery = new EmbeddedDocumentsQuery();		
-	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,1.24);
+	    List<Document> filteredDocuments = embeddedDocumentsQuery.FindOrdersByUnitPrice(CONNECTION_STRING,105.0);
 	    
 	    //verify size
 	    assertEquals(0, filteredDocuments.size());  
