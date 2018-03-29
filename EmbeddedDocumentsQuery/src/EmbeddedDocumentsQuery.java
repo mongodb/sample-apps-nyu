@@ -40,11 +40,11 @@ public class EmbeddedDocumentsQuery {
 			MongoDatabase database = client.getDatabase("stores");			
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
-			List<Document> queryQrders = collection
+			List<Document> queryOrders = collection
 					.find(eq("shippingAddress.city",city))
 					.into(new ArrayList<Document>());
 			
-			return queryQrders;
+			return queryOrders;
 		}
 		catch (Exception e) 
 		{
@@ -78,11 +78,11 @@ public class EmbeddedDocumentsQuery {
 			MongoDatabase database = client.getDatabase("stores");			
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
-			List<Document> queryQrders = collection
+			List<Document> queryOrders = collection
 					.find(and(eq("shippingAddress.state",state),eq("shippingAddress.city",city)))
 					.into(new ArrayList<Document>());
 			
-			return queryQrders;
+			return queryOrders;
 		}
 		catch (Exception e) 
 		{
@@ -95,15 +95,15 @@ public class EmbeddedDocumentsQuery {
 	}
 	
 	/**
-	 * Retrieves documents filtered by lineitems - unit_price. Use of gt
+	 * Retrieves documents filtered by lineitems - unitPrice. Use of gt
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
-	 * @param unit_price: lineitems - unit_price to filter documents.
+	 * @param unitPrice: lineitems - unitPrice to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	 
-	public List<Document> FindOrdersByUnitPrice(String connectionString, Double unit_price)
+	public List<Document> FindOrdersByUnitPrice(String connectionString, Double unitPrice)
 	{
-		if(connectionString == null || connectionString.isEmpty() || unit_price < 0)
+		if(connectionString == null || connectionString.isEmpty() || unitPrice < 0)
 			{
 				throw new IllegalArgumentException();
 			}
@@ -115,7 +115,7 @@ public class EmbeddedDocumentsQuery {
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
 			List<Document> queryOrders = collection
-					.find((gt("lineitems.unit_price",unit_price)))
+					.find((gt("lineitems.unit_price",unitPrice)))
 					.into(new ArrayList<Document>());
 			
 			return queryOrders;
@@ -124,23 +124,23 @@ public class EmbeddedDocumentsQuery {
 		{
 			//log the exception
 			System.out.println("Exception occured");
-			System.out.println("Deatils:");
+			System.out.println("Details:");
 			System.out.println(e.getStackTrace());
 			return null;
 		}		
 	}
 	
 	/**
-	 * Retrieves documents filtered by lineitems - sku and postalcode.
+	 * Retrieves documents filtered by lineitems - stockKeepingUnit and postalcode.
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
 	 * @param postalcode: postalcode to filter documents.
-	 * @param sku: lineitems - sku to filter documents.
+	 * @param sku: lineitems - stockKeepingUnit to filter documents.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> FindOrdersByPostalCodeAndSku(String connectionString, int postalCode, String sku)
+	public List<Document> FindOrdersByPostalCodeAndSku(String connectionString, int postalCode, String stockKeepingUnit)
 	{
-		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || sku ==null|| postalCode < 0)
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit.isEmpty() || stockKeepingUnit ==null|| postalCode < 0)
 			{
 				throw new IllegalArgumentException();
 			}
@@ -152,7 +152,7 @@ public class EmbeddedDocumentsQuery {
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
 			List<Document> queryOrders = collection
-					.find(and(eq("shippingAddress.postalCode",postalCode),eq("lineitems.sku",sku)))
+					.find(and(eq("shippingAddress.postalCode",postalCode),eq("lineitems.sku",stockKeepingUnit)))
 					.into(new ArrayList<Document>());
 			
 			return queryOrders;
@@ -161,7 +161,7 @@ public class EmbeddedDocumentsQuery {
 		{
 			//log the exception
 			System.out.println("Exception occured");
-			System.out.println("Deatils:");
+			System.out.println("Details:");
 			System.out.println(e.getStackTrace());
 			return null;
 		}		
