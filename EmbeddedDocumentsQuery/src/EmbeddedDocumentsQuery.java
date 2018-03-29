@@ -138,9 +138,9 @@ public class EmbeddedDocumentsQuery {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> FindOrdersByPostalCodeAndSku(String connectionString, int postalcode, String sku)
+	public List<Document> FindOrdersByPostalCodeAndSku(String connectionString, int postalCode, String sku)
 	{
-		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || sku ==null|| postalcode < 0)
+		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || sku ==null|| postalCode < 0)
 			{
 				throw new IllegalArgumentException();
 			}
