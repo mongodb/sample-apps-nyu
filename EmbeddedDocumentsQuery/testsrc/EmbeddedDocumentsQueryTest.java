@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 
 import java.util.List;
-import java.text.ParseException;
 import org.bson.Document;
 import org.junit.Test;
 
@@ -12,7 +11,7 @@ import com.mongodb.MongoClientURI;
 public class EmbeddedDocumentsQueryTest 
 {
     
-	static String CONNECTION_STRING = "mongodb+srv://Test:Test987#@cluster0-jxlpi.mongodb.net/test";
+	static String CONNECTION_STRING = "mongodb+srv://m001-student:m001-mongodb-basics@sandbox-rjrpn.mongodb.net/test";
 	
 	@Test
 	public void TestConnection() 
@@ -122,7 +121,7 @@ public class EmbeddedDocumentsQueryTest
 	    //verify record
 	    Document result = filteredDocuments.get(0);
 	    String id = result.getString("_id");
-	    assertEquals("5a989e4a86d089e9b9c6ea65", id);
+	    assertEquals("5a989e4afbff26cbbee32480", id);
 	    
 	}
 	
