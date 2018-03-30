@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class UpdateDataTest {
     
-	static String CONNECTION_STRING = "mongodb+srv://Test:Test987#@cluster0-jxlpi.mongodb.net/test";
+	static String CONNECTION_STRING = "mongodb+srv://m001-student:m001-mongodb-basics@sandbox-rjrpn.mongodb.net/test";
 	
 	@Test
 	public void TestConnection() {		
@@ -123,10 +123,17 @@ public class UpdateDataTest {
 		List<Document> filteredDocuments = updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 2300.00, 230.00);
 		assertEquals(4, filteredDocuments.size());	
 		
-		//verify record
-	    Document result = filteredDocuments.get(0);
-	    String id = result.getString("_id");
-	    assertEquals("5a989e4a1509ec12d817f03e", id);
+		//verify records
+		
+		String[] ids = {"5a989e4a1509ec12d817f03e", "5a989e4a60d71cc34a54260b", "5a989e4a24a0ed39cf3e92a0", "5a989e4a6ff8212799790854"};
+		
+		for(int i=0; i<=3; i++)
+		{	
+			Document result = filteredDocuments.get(i);
+			String id = result.getString("_id");
+			assertEquals(ids[i], id);
+		}
+
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -164,20 +171,26 @@ public class UpdateDataTest {
 	public void UpdateManyOrdersForEmbeddedFieldTest() {
 		
 		UpdateData updateData = new UpdateData();		
-		List<Document> filteredDocuments = updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS212", 70.23);
-		assertEquals(3, filteredDocuments.size());	
+		List<Document> filteredDocuments = updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", 70.23);
+		assertEquals(2, filteredDocuments.size());	
 		
-		//verify record
-	    Document result = filteredDocuments.get(0);
-	    String id = result.getString("_id");
-	    assertEquals("5a989e4ae0d1351062640fdc", id);
+		//verify records
+		
+		String[] ids = {"5a989e4a317af0f885a7e8f6", "5a989e4a6629619e0aecc566"};
+		
+		for(int i=0; i<=1; i++)
+		{	
+			Document result = filteredDocuments.get(i);
+			String id = result.getString("_id");
+			assertEquals(ids[i], id);
+		}
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> filteredDocuments =updateData.UpdateManyOrdersForEmbeddedField("", "MDBTS212", 70.23);	    
+		List<Document> filteredDocuments =updateData.UpdateManyOrdersForEmbeddedField("", "MDBTS244", 70.23);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -191,7 +204,7 @@ public class UpdateDataTest {
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidUnitPrice_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> filteredDocuments =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS212", -70.23);	    
+		List<Document> filteredDocuments =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", -70.23);	    
 	}
 	
 	@Test

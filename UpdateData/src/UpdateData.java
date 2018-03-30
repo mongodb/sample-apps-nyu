@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
+//import org.bson.conversions.Bson;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -8,7 +10,7 @@ import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.and;
 //import static com.mongodb.client.model.Filters.lt;
-//import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.gt;
 
 public class UpdateData {
 
@@ -42,7 +44,9 @@ public class UpdateData {
 
 			collection.updateOne(updateQuery, newDocument);
 			
-	        List<Document> queryResult = collection.find(and(eq("total",total),eq("subtotal",subtotal))).into(new ArrayList<Document>());
+	        List<Document> queryResult = collection
+	        		.find(and(eq("total",total),eq("subtotal",subtotal)))
+	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
 		
@@ -65,10 +69,10 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateOneOrderForEmbeddedField(String connectionString, String sku, String name)
+	public List<Document> UpdateOneOrderForEmbeddedField(String connectionString, String stockKeepingUnit, String name)
 	{
 
-		if(connectionString == null || connectionString.isEmpty() || sku == null || sku.isEmpty() || name == null || name.isEmpty())
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || name == null || name.isEmpty())
 		{
 			throw new IllegalArgumentException();
 		}
@@ -81,13 +85,15 @@ public class UpdateData {
 			MongoCollection<Document> collection = database.getCollection("orders");	
 	
 			Document newDocument = new Document();
-			newDocument.append("$set", new Document().append("lineitems.name", name));
+			newDocument.append("$set", new Document().append("lineitems.$.name", name));
 
-			Document updateQuery = new Document().append("lineitems.sku", sku);
+			Document updateQuery = new Document().append("lineitems.sku", stockKeepingUnit);
 
 			collection.updateOne(updateQuery, newDocument);
 			
-	        List<Document> queryResult = collection.find(and(eq("lineitems.sku", sku),eq("lineitems.name", name))).into(new ArrayList<Document>());
+	        List<Document> queryResult = collection
+	        		.find(and(eq("lineitems.sku", stockKeepingUnit),eq("lineitems.name", name)))
+	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
 		
@@ -133,7 +139,9 @@ public class UpdateData {
 
 			collection.updateMany(updateQuery, newDocument);
 			
-	        List<Document> queryResult = collection.find(and(eq("total",total),eq("tax",tax))).into(new ArrayList<Document>());
+	        List<Document> queryResult = collection
+	        		.find(and(gt("total",total),eq("tax",tax)))
+	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
 		
@@ -147,7 +155,7 @@ public class UpdateData {
 							
 		}
 	}
-	
+
 	/**
 	 * Updates documents in the collection using updateOne()
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
@@ -156,10 +164,10 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateManyOrdersForEmbeddedField(String connectionString, String sku, Double unit_price)
+	public List<Document> UpdateManyOrdersForEmbeddedField(String connectionString, String stockKeepingUnit, Double unitPrice)
 	{
 
-		if(connectionString == null || connectionString.isEmpty() || sku == null || sku.isEmpty() || unit_price <= 0)
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || unitPrice <= 0)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -172,14 +180,15 @@ public class UpdateData {
 			MongoCollection<Document> collection = database.getCollection("orders");	
 	
 			Document newDocument = new Document();
-			newDocument.append("$set", new Document().append("lineitems.unit_price", unit_price));
+			newDocument.append("$set", new Document().append("lineitems.$.unit_price", unitPrice));
 			
-			Document updateQuery = new Document();
-			updateQuery.append("lineitems.sku", sku);
+			Document updateQuery = new Document().append("lineitems.sku", stockKeepingUnit);
 
 			collection.updateMany(updateQuery, newDocument);
 			
-	        List<Document> queryResult = collection.find(and(eq("lineitems.sku", sku),eq("lineitems.unit_price", unit_price))).into(new ArrayList<Document>());
+	        List<Document> queryResult = collection
+	        		.find(and(eq("lineitems.sku", stockKeepingUnit),eq("lineitems.unit_price", unitPrice)))
+	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
 		
