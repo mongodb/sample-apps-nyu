@@ -1,20 +1,12 @@
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.elemMatch;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.gt;
 import static org.junit.Assert.*;
 
 import org.bson.Document;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import org.junit.Test;
 
@@ -22,14 +14,8 @@ import org.junit.Test;
 public class InsertDataTest {
 
 	String CONNECTION = "mongodb+srv://m001-student:student123#@sandbox-trhqa.mongodb.net/test";
-	String json = " 'orderPlaced': '2018-03-01', 'total': 13.00, 'subtotal': 191.00,"
-			+ "'shipping':11.00,'tax':17.00,"
-			+ "'status': ['shipped', '2018-03-04'],"
-			+ "'shippingAddress': {'number': 345, 'street': 'Broadway', 'city': 'Sunnyside',"
-			+"'state':'Yonkers','country':'USA','postalCode':10010},"
-			+"'lineitems':[{'sku':'MDBTS115','name':'color pencil','quantity':31,'unit_price':1.35},"
-			+"{'sku':'MDBTS438','name':'Highlighter','quantity':27,'unit_price':2.4}]";
 	
+	 
 	//Check the connection
 	@Test
 	public void TestConnection() {		
@@ -44,33 +30,14 @@ public class InsertDataTest {
 	@Test
 	public void AddOneOrderWithDataTest() {
 		
-        Document newOrder = new Document("orderPlaced", "2018-03-01")
-        .append("total", 1633.2)
-        .append("subtotal",421.42)
-		.append("shipping", 91)
-		.append("tax", 11.41);
-
-     	List status = Arrays.asList("shipped","2018-03-10");
-		newOrder.put("status", status);
-
-		Document shipping = new Document ("number",113)
-		.append("street", "Sunnyside")
-		.append("city","Yonker")
-		.append("state","New York")
-		.append("country","USA")
-		.append("postalCode",57850);
-		newOrder.put("shippingAddress", shipping);	
+		String sku = "MDBTS110";
+		String item = "color pencil";
+		Double unit_price = 9.50;
+		int quantity = 32;
 		
-		Document itemDetail = new Document("sku","MDBTS285")
-		.append("name","color pencil")
-		.append("quantity",32)
-		.append("unit_price",9.3808);
-		List items = Arrays.asList(itemDetail);
-		newOrder.put("lineitems", items);
-			 
 		InsertData insertData = new InsertData();		
 		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
-		InsertData.AddOneOrderWithData(CONNECTION, newOrder);
+		InsertData.AddOneOrderWithData(CONNECTION, sku, item, unit_price, quantity);
 		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
 			
 		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
@@ -80,94 +47,123 @@ public class InsertDataTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void AddOneOrderWithDataTest_InvalidConnectionString_ThrowsException() 
 	{
-		Document newOrder = new Document("orderPlaced", "2018-03-01")
-        .append("total", 1633.2)
-        .append("subtotal",421.42)
-		.append("shipping", 91)
-		.append("tax", 11.41);
-
-     	List status = Arrays.asList("shipped","2018-03-10");
-		newOrder.put("status", status);
-
-		Document shipping = new Document ("number",113)
-		.append("street", "Sunnyside")
-		.append("city","Yonker")
-		.append("state","New York")
-		.append("country","USA")
-		.append("postalCode",57850);
-		newOrder.put("shippingAddress", shipping);	
-		
-		Document itemDetail = new Document("sku","MDBTS285")
-		.append("name","color pencil")
-		.append("quantity",32)
-		.append("unit_price",9.3808);
-		List items = Arrays.asList(itemDetail);
-		newOrder.put("lineitems", items);
-	
 		InsertData insertData = new InsertData();	
-		List<Document> AddDocuments = InsertData.AddOneOrderWithData("", newOrder );
-	}
-	
-	
-	@Test
-	public void AddOneOrderWithExpDataTest_withoutID() {
-	
-		String orderData ="{"+json+"}";		
-		InsertData insertData = new InsertData();		
-		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
-		List<Document> AddDocuments = InsertData.AddOneOrderWithExpData(CONNECTION, orderData);
-		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
-		// check if the data is added and the overall size has incremented by 1
-		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
-		
-	}
-	
-	@Test
-	public void AddOneOrderWithExpDataTest_withID() {
-	
-		String orderData = "{ '_id': '7a999e1a1a11cc111fb1f99c'," +json+"}";
-					
-		InsertData insertData = new InsertData();		
-		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
-		List<Document> AddDocuments = InsertData.AddOneOrderWithExpData(CONNECTION, orderData);
-		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
-		// check if the data is added and the overall size has incremented by 1
-		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
-		// check if the above data can be found in the collection. Meaning it is inserted
-		Document result = AddDocuments.get(filteredDocumentsAfter.size()-1);
-	    String id = result.getString("_id");
-	    assertEquals("7a999e1a1a11cc111fb1f99c",id);	
+		List<Document> AddDocuments = InsertData.AddOneOrderWithData("", "MDBTS120", "color pencil", 9.50, 32 );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void AddOneOrderWithExpDataTest_InvalidConnectionString_ThrowsException() 
+	public void AddOneOrderWithDataTest_emptyValue_ThrowsException() 
 	{
-		String orderData ="{"+json+"}";		
-		InsertData insertData = new InsertData();		
-		List<Document> AddDocuments = InsertData.AddOneOrderWithExpData("", orderData);
+		InsertData insertData = new InsertData();	
+		List<Document> AddDocuments = InsertData.AddOneOrderWithData(CONNECTION, "", "color pencil", 0.0, 32 );
 	}
-	/*
+	
+	
 	@Test
-	public void AddOneOrderJsonFileTest() {
+	public void AddOneOrderWithFileTest() {
 		
 		InsertData insertData = new InsertData();		
 		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
-		List<Document> AddDocuments = insertData.AddOneOrderJsonFile(CONNECTION,"simpledata.json");
+		List<Document> AddDocuments = insertData.AddOneOrderWithFile(CONNECTION,"simpledata.json");
 		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
 		// check if the data is added and the overall size has incremented by 1
-	//	assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
+		
+		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
 		Document result = AddDocuments.get(filteredDocumentsAfter.size()-1);
-	    String id = result.getString("_id");
-	    assertEquals("8a999e1a1a11cc111fb1f99c",id);	
+		String id = result.getString("_id");
+		assertEquals("9a999e1a1a11cc111fb1f99c",id);	
+	   
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void AddOneOrderWithFileTest_InvalidConnectionString_ThrowsException() 
+	{
+		InsertData insertData = new InsertData();	
+		List<Document> AddDocuments = insertData.AddOneOrderWithFile("", "simpledata.json" );
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void AddOneOrderWithFileTest_InvalidFile_ThrowsException() 
+	{
+		InsertData insertData = new InsertData();	
+		List<Document> AddDocuments = insertData.AddOneOrderWithFile(CONNECTION, "simple.json" );
 	}
 	
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void AddOneOrderJsonFileTest_ExistingID_ThrowsException() 
+	public void AddOneOrderWithFileTest_InvalidFormat_ThrowsException() 
 	{
 		InsertData insertData = new InsertData();		
-		List<Document> AddDocuments = InsertData.AddOneOrderJsonFile(CONNECTION,"simpledata.json");
+		List<Document> AddDocuments = insertData.AddOneOrderWithFile(CONNECTION,"baddata.json");
 	    
-	}*/
+	}	
+	
+	@Test
+	public void AddMultipleOrdersWithFilesTest() {
+		
+		InsertData insertData = new InsertData();		
+		List<Document> multipleOrder = new ArrayList<>();
+		  
+		String[] orderfiles = new String[3];
+		
+		for (int i=0; i< orderfiles.length; i++)
+		{
+			orderfiles[i] = "order"+(i+1)+".json";
+		}
+		
+		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
+		List<Document> AddDocuments = insertData.AddMultipleOrdersWithFiles(CONNECTION, orderfiles);
+		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
+		
+		// check if the data is added and the overall size has incremented by the size of the array
+		assertEquals(filteredDocumentsBefore.size()+orderfiles.length, filteredDocumentsAfter.size());	
+		Document result = AddDocuments.get(filteredDocumentsAfter.size()-1);
+		String id = result.getString("_id");
+		assertEquals("3a333e3a3a33cc333fb3f33c",id);	
+	
+		
+	}
+	
+	@Test
+	public void AddMultipleOrderWithDataTest() {
+		
+		String[] sku = {"MAERW111","MBERQ112","MCERT113"};
+		String[] item = {"color pencil","marker","compass"};
+		Double[] unit = {5.0, 24.5, 35.20};
+		int[] quant= {7,14,23};
+		
+		InsertData insertData = new InsertData();		
+		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
+		InsertData.AddMultipleOrderWithData(CONNECTION, sku, item, unit, quant);
+		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(CONNECTION);
+			
+		assertEquals(filteredDocumentsBefore.size()+3, filteredDocumentsAfter.size());	
+	}
 
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void AddMultipleOrderWithDataTest_InvalidConnectionString_ThrowsException() 
+	{
+		String[] sku = {"MAERW111","MBERQ112","MCERT113"};
+		String[] item = {"color pencil","marker","compass"};
+		Double[] unit = {5.0, 24.5, 35.20};
+		int[] quant= {7, 14,23};
+		
+		InsertData insertData = new InsertData();	
+		List<Document> AddDocuments = insertData.AddMultipleOrderWithData("",  sku, item, unit, quant );
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void AddMultipleOrderWithDataTest_emptyValue_ThrowsException() 
+	{
+		String[] sku = {};
+		String[] item = {"color pencil","marker","compass"};
+		Double[] unit = {};
+		int[] quant= {7, 14,23};
+		
+		InsertData insertData = new InsertData();	
+		List<Document> AddDocuments = insertData.AddMultipleOrderWithData("",  sku, item, unit, quant );
+	}
+
+	
 }	
