@@ -160,29 +160,33 @@ The method illustrates the use of insertOne operator also. In this method, the J
   }
 ```
 
-This file is read and parsed into a JSON object. Then it is further converted into a Document type and the data is inserted into the stores.orders collection. As this document specifies an _id field like above, this _id number is given preference and the driver does not add a new _id field.  
+This file is read and parsed into a JSON object. Then it is further converted into a Document type and the data is inserted into the stores.orders collection. As this document specifies an *_id* field like above, this *_id* number is given preference and the driver does not add a new *_id* field.  
 
 
 
 
-### FindByStatus - $eq Operator
+### AddMultipleOrderWithData
 ```javascript
-List<Document> queryResult = collection.find(eq("status",status))
-	    			.into(new ArrayList<Document>());
+ collection.insertMany(Arrays.asList(newOrder[0],newOrder[1], newOrder[2]));
+			
+```
+The following example inserts 3 new documents into the orders collection. 
+
+
+### AddMultipleOrdersWithFiles
+```javascript
+ for(int i =0; i<orders.length; i++)
+ {
+	Object obj = new JSONParser().parse(new FileReader(orders[i]));
+	JSONObject jo = (JSONObject) obj;
+	String jsonText = jo.toJSONString();
+	Document doc = Document.parse(jsonText);
+	multipleOrders.add(doc);
+}
+collection.insertMany(multipleOrders);
 ```
 
-The method illustrates the use of $eq operator. The $eq operator matches documents where the value of a field equals the specified value. This method takes the status as the parameter and returns a list of orders from the *stores.orders* collection where the status of the order matches the parameter. 
-The field *status* is an array that contains the date of status update as well as the following status: “shipped”, “ordered”, “cancelled”. 
-
-
-### FindByItemQuantity - $elemMatch Operator
-```javascript
- List<Document> queryResult = collection.find(elemMatch("lineitems",and
-                    (eq("name",item_name),gt("quantity",quantity))))
-                    .into(new ArrayList<Document>());
-```
-
-The method illustrates the use of $elemMatch operator. The $elemMatch operator matches documents that contain an array field with at least one element that matches all the specified query criteria. This method takes the item name and quantity as the parameter. It returns a list of orders from the *stores.orders* collection where the name of the item matches the parameter as well as the quantity is greater than the paramenter. 
+The insertMany() function adds multiple documents into a collection. The above example uses db.collection.insertMany() to insert 3 documents. It reads 3 files named order1.json, order2.json and order3.json, parses them through a JSON Parser into a JSON object. Then the multiple order data is aggregated into the *multipleOrders* document and using insertMany function, it is inserted into the stores.orders collection.   
 
 
 ## Running the test
@@ -191,4 +195,4 @@ The unit test cases are written using JUnit 4 framework. You can find them here:
     .
     ├── ...
     ├── testsrc                    	# Source folder for all unit tests
-    │   ├── ArrayQueryTest.java        # Source file for all unit tests
+    │   ├── InsertDataTest.java        # Source file for all unit tests
