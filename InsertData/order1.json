@@ -1,0 +1,35 @@
+
+  {
+    
+    "orderPlaced": "2018-04-11",
+    "total": 5341.10,
+    "subtotal": 552.0,
+    "shipping": 121,
+    "tax": 25,
+    "status": [
+      "shipped",
+      "2018-4-23"
+    ],
+    "shippingAddress": {
+      "number": 143,
+      "street": "Parkway",
+      "city": "Nashville",
+      "state": "Texas",
+      "country": "USA",
+      "postalCode": 10420
+    },
+    "lineitems": [
+      {
+        "sku": "MSDT222",
+        "name": "Tape Holder",
+        "quantity": 52,
+        "unit_price": 4.8
+      },
+      {
+        "sku": "MGER5918",
+        "name": "Paper Cutter",
+        "quantity": 12,
+        "unit_price": 53.24
+      }
+    ]
+  }

@@ -1,0 +1,34 @@
+  {
+    
+    "orderPlaced": "2018-03-11",
+    "total": 904.23,
+    "subtotal": 104.24,
+    "shipping": 60,
+    "tax": 153,
+    "status": [
+      "ordered",
+      "2018-3-23"
+    ],
+    "shippingAddress": {
+      "number": 510,
+      "street": "Bleecker",
+      "city": "Austin",
+      "state": "Texas",
+      "country": "USA",
+      "postalCode": 51410
+    },
+    "lineitems": [
+      {
+        "sku": "MSD498",
+        "name": "Paper Cutter",
+        "quantity": 40,
+        "unit_price": 12
+      },
+      {
+        "sku": "MGER909",
+        "name": "Glue Stick",
+        "quantity": 24,
+        "unit_price": 23.40
+      }
+    ]
+  }

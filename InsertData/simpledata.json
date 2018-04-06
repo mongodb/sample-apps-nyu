@@ -1,0 +1,34 @@
+ {
+    "_id":"9a999e1a1a11cc111fb1f99c",
+    "orderPlaced": "2018-03-14",
+    "total": 1483.102,
+    "subtotal": 253.5469,
+    "shipping": 381,
+    "tax": 83.4925,
+    "status": [
+      "shipped",
+      "2018-01-23"
+    ],
+    "shippingAddress": {
+      "number": 133,
+      "street": "Rockaway Parkway",
+      "city": "Deercroft",
+      "state": "Washington",
+      "country": "USA",
+      "postalCode": 57850
+    },
+    "lineitems": [
+      {
+        "sku": "MDBTS285",
+        "name": "24-tooth Carbide Tipped Saw Blade",
+        "quantity": 32,
+        "unit_price": 9.3808
+      },
+      {
+        "sku": "MDBTS468",
+        "name": "24-tooth Carbide Tipped Saw Blade",
+        "quantity": 17,
+        "unit_price": 28.9123
+      }
+    ]
+  }

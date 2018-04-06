@@ -1,13 +1,17 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 //import org.json.JSONObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.Arrays;
 
@@ -37,6 +41,8 @@ public class InsertData {
 	}
 	*/
 	
+	private static final boolean FileNotFoundException = false;
+
 	/**
 	 * Inserts documents into the collection using insertOne()
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
@@ -49,7 +55,6 @@ public class InsertData {
 		
 		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || item.isEmpty()|| unit_price==0.0 ||quantity ==0 )
 		{
-			System.out.println("ENTERS HERE");
 			throw new IllegalArgumentException();
 		}
 		
@@ -105,23 +110,29 @@ public class InsertData {
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
 	 * @param fileName: JSON file that contains the order details 
 	 * @return List<Document>: ArrayList of matching documents.
+	 * @throws ParseException 
+	 * @throws IOException 
+	 
 	 */
-	public static List<Document> AddOneOrderWithFile(String connectionString, String fileName)
+	public static List<Document> AddOneOrderWithFile(String connectionString, String fileName) throws IOException, ParseException   
 	{
-		if(connectionString == null || connectionString.isEmpty())
+		
+		if(connectionString == null || connectionString.isEmpty() ||fileName.equals(null))
 		{
 			throw new IllegalArgumentException();
 		}
+		
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
+		FileReader file=new FileReader(fileName);
+		Object obj = new JSONParser().parse(file);
+        JSONObject jo = (JSONObject) obj;
 		try (MongoClient client = new MongoClient(clientUri))
 		{
-		   
 			MongoDatabase database = client.getDatabase("stores");
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
 			//read the json file   
-	        Object obj = new JSONParser().parse(new FileReader(fileName));
-	        JSONObject jo = (JSONObject) obj;
+	        
 	        String jsonText = jo.toJSONString();
 	        Document doc = Document.parse(jsonText);
 		    collection.insertOne(doc);
@@ -129,10 +140,7 @@ public class InsertData {
 	        List<Document> queryResult = collection.find().into(new ArrayList<Document>());
 		    return queryResult;		   
         }	
-		catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		    return null;
-		}
+		
 		catch (Exception e) {
 			//log the exception
 			
@@ -149,7 +157,7 @@ public class InsertData {
 	 * @param orders: Array of JSON file names that contain order details
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> AddMultipleOrdersWithFiles(String connectionString, String[] orders)
+	public static List<Document> AddMultipleOrdersWithFiles(String connectionString, String[] orders) throws java.io.FileNotFoundException
 	{
 
 		if(connectionString == null || connectionString.isEmpty() )

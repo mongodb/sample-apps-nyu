@@ -1,13 +1,23 @@
+import static com.mongodb.client.model.Filters.in;
 import static org.junit.Assert.*;
 
 import org.bson.Document;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 
+import org.json.JSONException;
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 
@@ -60,7 +70,7 @@ public class InsertDataTest {
 	
 	
 	@Test
-	public void AddOneOrderWithFileTest() {
+	public void AddOneOrderWithFileTest() throws JSONException, IOException, ParseException {
 		
 		InsertData insertData = new InsertData();		
 		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(CONNECTION);
@@ -76,30 +86,23 @@ public class InsertDataTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void AddOneOrderWithFileTest_InvalidConnectionString_ThrowsException() 
+	public void AddOneOrderWithFileTest_InvalidConnectionString_ThrowsException() throws IOException, ParseException   
 	{
 		InsertData insertData = new InsertData();	
 		List<Document> AddDocuments = insertData.AddOneOrderWithFile("", "simpledata.json" );
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void AddOneOrderWithFileTest_InvalidFile_ThrowsException() 
+	@Test(expected=FileNotFoundException.class)
+	public void AddOneOrderWithFileTest_InvalidFile_ThrowsException() throws IOException, ParseException   
 	{
 		InsertData insertData = new InsertData();	
 		List<Document> AddDocuments = insertData.AddOneOrderWithFile(CONNECTION, "simple.json" );
+		
 	}
-	
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void AddOneOrderWithFileTest_InvalidFormat_ThrowsException() 
-	{
-		InsertData insertData = new InsertData();		
-		List<Document> AddDocuments = insertData.AddOneOrderWithFile(CONNECTION,"baddata.json");
-	    
-	}	
+		
 	
 	@Test
-	public void AddMultipleOrdersWithFilesTest() {
+	public void AddMultipleOrdersWithFilesTest() throws FileNotFoundException {
 		
 		InsertData insertData = new InsertData();		
 		List<Document> multipleOrder = new ArrayList<>();
@@ -165,5 +168,23 @@ public class InsertDataTest {
 		List<Document> AddDocuments = insertData.AddMultipleOrderWithData("",  sku, item, unit, quant );
 	}
 
+	
+	@Test
+	public void RemoveAddedOrders() 
+	{
+		
+		MongoClientURI clientUri = new MongoClientURI(CONNECTION);
+		MongoClient client = new MongoClient(clientUri);
+		MongoDatabase database = client.getDatabase("stores");
+		MongoCollection<Document> collection = database.getCollection("orders");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String today = formatter.format(date);
+		String[] ddatess = {today,"2018-03-14","2018-03-11", "2018-04-11"};
+		DeleteResult deletedOrder = collection.deleteMany(in("orderPlaced",ddatess));
+		
+	
+		System.out.println("Number of Orders removed: "+deletedOrder.getDeletedCount());
+	}
 	
 }	
