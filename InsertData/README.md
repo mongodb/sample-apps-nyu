@@ -189,6 +189,21 @@ collection.insertMany(multipleOrders);
 The insertMany() function adds multiple documents into a collection. The above example uses db.collection.insertMany() to insert 3 documents. It reads 3 files named order1.json, order2.json and order3.json, parses them through a JSON Parser into a JSON object. Then the multiple order data is aggregated into the *multipleOrders* document and using insertMany function, it is inserted into the stores.orders collection.   
 
 
+
+## Additional data files for running the program 
+The JSON files used in this program resides in the folder of compiled codes. You can find them here:
+
+    InsertData				# Source folder of the codes
+    ├── ...
+    ├── src                    	
+    ├── testsrc                    	
+    ├── order1.json			# Source file
+    ├── order2.json
+    ├── order3.json
+    ├── simpledata.json
+  
+
+
 ## Running the test
 The unit test cases are written using JUnit 4 framework. You can find them here:
 
