@@ -12,18 +12,25 @@ import java.util.List;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.and;
 
 import org.json.JSONException;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-
 public class InsertDataTest {
 
 	String connectionString = "mongodb+srv://m001-student:student123#@sandbox-trhqa.mongodb.net/test";
+	MongoClientURI clientUri = new MongoClientURI(connectionString);
+	MongoClient client = new MongoClient(clientUri);
+	MongoDatabase database = client.getDatabase("stores");
+	MongoCollection<Document> collection = database.getCollection("orders");
 	
 	 
 	//Check the connection
@@ -49,12 +56,13 @@ public class InsertDataTest {
 		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(connectionString);
 		InsertData.AddOneOrderWithData(connectionString, stockKeepingUnit, item, unit_price, quantity);
 		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
-			
 		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
-		//List<Document> queryResult = collection.find().into(new ArrayList<Document>());
-		//System.out.println(queryResult.size());
 		
-	
+		//delete the inserted data to restore original state
+		DeleteResult deletedOrder = collection.deleteMany(and(eq("lineitems.sku","MDBTS110"),eq("lineitems.name","color pencil")));
+		filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
+		assertEquals(filteredDocumentsBefore.size(), filteredDocumentsAfter.size());	
+		
 	}
 
 	
@@ -85,7 +93,12 @@ public class InsertDataTest {
 		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
 		Document result = AddDocuments.get(filteredDocumentsAfter.size()-1);
 		String id = result.getString("_id");
-		assertEquals("9a999e1a1a11cc111fb1f99c",id);	
+		assertEquals("9a999e1a1a11cc111fb1f99c",id);		
+		
+		//delete the inserted data to restore original state
+		DeleteResult deletedOrder = collection.deleteOne(eq("_id","9a999e1a1a11cc111fb1f99c"));
+		filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
+		assertEquals(filteredDocumentsBefore.size(), filteredDocumentsAfter.size());					
 	   
 	}
 	
@@ -127,9 +140,34 @@ public class InsertDataTest {
 		Document result = AddDocuments.get(filteredDocumentsAfter.size()-1);
 		String id = result.getString("_id");
 		assertEquals("3a333e3a3a33cc333fb3f33c",id);	
+		
+		//delete the inserted data to restore original state		
+		String removeDates = "2018-04-11";
+		DeleteResult deletedOrder = collection.deleteMany(in("orderPlaced",removeDates));
+		filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
+		assertEquals(filteredDocumentsBefore.size(), filteredDocumentsAfter.size());	
+	}
 	
+	
+
+	@Test(expected=IllegalArgumentException.class)
+	public void AddMultipleOrdersWithFilesTest_InvalidConnectionString_ThrowsException() throws FileNotFoundException 
+	{
+		InsertData insertData = new InsertData();		
+		List<Document> multipleOrder = new ArrayList<>();
+		  
+		String[] orderfiles = new String[3];
+		
+		for (int i=0; i< orderfiles.length; i++)
+		{
+			orderfiles[i] = "order"+(i+1)+".json";
+		}
+		
+		List<Document> AddDocuments = insertData.AddMultipleOrdersWithFiles("", orderfiles);
 		
 	}
+	
+
 	
 	@Test
 	public void AddMultipleOrderWithDataTest() {
@@ -145,6 +183,11 @@ public class InsertDataTest {
 		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
 			
 		assertEquals(filteredDocumentsBefore.size()+3, filteredDocumentsAfter.size());	
+		
+		//delete the inserted data to restore original state
+		DeleteResult deletedOrder = collection.deleteMany(in("lineitems.sku",stockKeepingUnit));
+		filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
+		assertEquals(filteredDocumentsBefore.size(), filteredDocumentsAfter.size());	
 	}
 
 	
@@ -170,27 +213,5 @@ public class InsertDataTest {
 		
 		InsertData insertData = new InsertData();	
 		List<Document> AddDocuments = insertData.AddMultipleOrderWithData("",  stockKeepingUnit, item, unit, quant );
-	}
-
-	
-	@Test
-	public void RemoveAddedOrders() 
-	{
-		
-		MongoClientURI clientUri = new MongoClientURI(connectionString);
-		MongoClient client = new MongoClient(clientUri);
-		MongoDatabase database = client.getDatabase("stores");
-		MongoCollection<Document> collection = database.getCollection("orders");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		String today = formatter.format(date);
-		String[] removeDates = {"2018-03-14","2018-03-11", "2018-04-11", today};
-		DeleteResult deletedOrder = collection.deleteMany(in("orderPlaced",removeDates));
-		List<Document> queryResult = collection.find().into(new ArrayList<Document>());
-		System.out.println(queryResult.size());
-		//assertEquals(102, queryResult.size());
-		//assertEquals(102, queryResult.size());
-	
-	}
-	
+	}	
 }	

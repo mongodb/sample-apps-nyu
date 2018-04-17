@@ -34,7 +34,7 @@ public class InsertData {
 	/**
 	 * Inserts documents into the collection using insertOne()
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
-	 * @param sku: SKU number of the item ordered, item: name of the ide, unit_price: unit price of the item, quantity: number of items ordered
+	 * @param stockKeepingUnit: stockKeepingUnit number of the item ordered, item: name of the item, unit_price: unit price of the item, quantity: number of items ordered
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	public static List<Document> AddOneOrderWithData(String connectionString, String stockKeepingUnit, String item, Double  unitPrice, int quantity)
@@ -195,14 +195,14 @@ public class InsertData {
 	/**
 	 * Inserts documents into the collection using insertOne()
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
-	 * @param sku: Array of SKU numbers of the item ordered, item: Arrays of name of the item, unit_price: Array of unit prices of the items, quantity: Array of number of items ordered
+	 * @param stockKeepingUnit: Array of stockKeepingUnit numbers of the item ordered, item: Arrays of name of the item, unit_price: Array of unit prices of the items, quantity: Array of number of items ordered
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> AddMultipleOrderWithData(String connectionString, String[] sku, String[] item, Double[]  unit_price, int[] quantity)
+	public static List<Document> AddMultipleOrderWithData(String connectionString, String[] stockKeepingUnit, String[] item, Double[]  unit_price, int[] quantity)
 	{
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		
-		if(connectionString == null || connectionString.isEmpty() || sku.length ==0|| item.length ==0|| unit_price.length ==0 ||quantity.length ==0)
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit.length ==0|| item.length ==0|| unit_price.length ==0 ||quantity.length ==0)
 		{		
 			throw new IllegalArgumentException();
 		}
@@ -212,7 +212,7 @@ public class InsertData {
 			MongoDatabase database = client.getDatabase("stores");
 			MongoCollection<Document> collection = database.getCollection("orders");		
 	    	Document[] newOrder = new Document[3];
-			for(int i=0; i<sku.length; i++)
+			for(int i=0; i<stockKeepingUnit.length; i++)
 			{
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = new Date();
@@ -237,7 +237,7 @@ public class InsertData {
 				.append("postalCode",10001);
 				newOrder[i].put("shippingAddress", shipping);	
 				
-				Document itemDetail = new Document("sku",sku[i])
+				Document itemDetail = new Document("sku",stockKeepingUnit[i])
 				.append("name",item[i])
 				.append("quantity",quantity[i])
 				.append("unit_price",unit_price[i]);
@@ -294,5 +294,34 @@ public class InsertData {
 		}
 	}
 	
+	public List<Document> FindOrders(String connectionString, String id)
+	{
+
+		if(connectionString == null || connectionString.isEmpty() )
+		{
+			throw new IllegalArgumentException();
+		}
+		MongoClientURI clientUri = new MongoClientURI(connectionString);
+		try(MongoClient client = new MongoClient(clientUri))
+		{
+		
+			MongoDatabase database = client.getDatabase("stores");
+			MongoCollection<Document> collection = database.getCollection("orders");		
+				
+			List<Document> ordersFiltered = collection
+					.find(eq("_id",id))
+					.into(new ArrayList<Document>());
+			return ordersFiltered;
+			
+		}
+		catch (Exception e) {
+			//log the exception
+			
+			System.out.println("An exception occured");
+			System.out.println("Details:");
+			e.printStackTrace();
+			return null;							
+		}
+	}
 }
 
