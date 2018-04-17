@@ -49,12 +49,12 @@ public class InsertDataTest {
 		
 		String stockKeepingUnit = "MDBTS110";
 		String item = "color pencil";
-		Double unit_price = 9.50;
+		Double unitPrice = 9.50;
 		int quantity = 32;
 		
 		InsertData insertData = new InsertData();		
 		List<Document> filteredDocumentsBefore = insertData.CountOrderSize(connectionString);
-		InsertData.AddOneOrderWithData(connectionString, stockKeepingUnit, item, unit_price, quantity);
+		InsertData.AddOneOrderWithData(connectionString, stockKeepingUnit, item, unitPrice, quantity);
 		List<Document> filteredDocumentsAfter = insertData.CountOrderSize(connectionString);
 		assertEquals(filteredDocumentsBefore.size()+1, filteredDocumentsAfter.size());	
 		

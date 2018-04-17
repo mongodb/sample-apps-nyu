@@ -34,7 +34,7 @@ public class InsertData {
 	/**
 	 * Inserts documents into the collection using insertOne()
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
-	 * @param stockKeepingUnit: stockKeepingUnit number of the item ordered, item: name of the item, unit_price: unit price of the item, quantity: number of items ordered
+	 * @param stockKeepingUnit: stockKeepingUnit number of the item ordered, item: name of the item, unitPrice: unit price of the item, quantity: number of items ordered
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	public static List<Document> AddOneOrderWithData(String connectionString, String stockKeepingUnit, String item, Double  unitPrice, int quantity)
@@ -198,11 +198,11 @@ public class InsertData {
 	 * @param stockKeepingUnit: Array of stockKeepingUnit numbers of the item ordered, item: Arrays of name of the item, unit_price: Array of unit prices of the items, quantity: Array of number of items ordered
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> AddMultipleOrderWithData(String connectionString, String[] stockKeepingUnit, String[] item, Double[]  unit_price, int[] quantity)
+	public static List<Document> AddMultipleOrderWithData(String connectionString, String[] stockKeepingUnit, String[] item, Double[]  unitPrice, int[] quantity)
 	{
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		
-		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit.length ==0|| item.length ==0|| unit_price.length ==0 ||quantity.length ==0)
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit.length ==0|| item.length ==0|| unitPrice.length ==0 ||quantity.length ==0)
 		{		
 			throw new IllegalArgumentException();
 		}
@@ -217,7 +217,7 @@ public class InsertData {
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = new Date();
 				String today = formatter.format(date);
-				Double total = unit_price[i]*quantity[i];
+				Double total = unitPrice[i]*quantity[i];
 				Double subtotal = total/4;
 				
 				newOrder[i] = new Document("orderPlaced", today)
@@ -240,7 +240,7 @@ public class InsertData {
 				Document itemDetail = new Document("sku",stockKeepingUnit[i])
 				.append("name",item[i])
 				.append("quantity",quantity[i])
-				.append("unit_price",unit_price[i]);
+				.append("unit_price",unitPrice[i]);
 				List items = Arrays.asList(itemDetail);
 				newOrder[i].put("lineitems", items);
 			}
