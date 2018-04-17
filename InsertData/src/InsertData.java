@@ -1,3 +1,5 @@
+import static com.mongodb.client.model.Filters.eq;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,21 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class InsertData {
-		/*  public static void main(String[] args)
-	{
-	System.out.println("hello");
-		String CONNECTION = "mongodb+srv://m001-student:student123#@sandbox-trhqa.mongodb.net/test";
-		//List<Document> check = AddOneOrder(CONNECTION);//, String[] cities)
-		//List<Document> checkAll = AddMultipleOrders(CONNECTION);//, String[] cities)
-	//	AddOneOrderJsonFile
-		//System.out.println(check);
-		//System.out.println(checkAll);
 	
-	List<Document> checkFile = AddMultipleOrderWithData(CONNECTION, sku,item, unit,quant);
-	List<Document> checkFile2 = AddOneOrderWithData(CONNECTION, "a","b", 5.5,5);
-	
-	}
-	*/
 	
 	private static final boolean FileNotFoundException = false;
 
@@ -49,11 +37,11 @@ public class InsertData {
 	 * @param sku: SKU number of the item ordered, item: name of the ide, unit_price: unit price of the item, quantity: number of items ordered
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
-	public static List<Document> AddOneOrderWithData(String connectionString, String sku, String item, Double  unit_price, int quantity)
+	public static List<Document> AddOneOrderWithData(String connectionString, String stockKeepingUnit, String item, Double  unitPrice, int quantity)
 	{
 		MongoClientURI clientUri = new MongoClientURI(connectionString);
 		
-		if(connectionString == null || connectionString.isEmpty() || sku.isEmpty() || item.isEmpty()|| unit_price==0.0 ||quantity ==0 )
+		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit.isEmpty() || item.isEmpty()|| unitPrice==0.0 ||quantity ==0 )
 		{
 			throw new IllegalArgumentException();
 		}
@@ -61,7 +49,7 @@ public class InsertData {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String today = formatter.format(date);
-		Double total = unit_price*quantity;
+		Double total = unitPrice*quantity;
 		Double subtotal = total/4;
 		
 		Document newOrder = new Document("orderPlaced", today)
@@ -81,10 +69,10 @@ public class InsertData {
 		.append("postalCode",10001);
 		newOrder.put("shippingAddress", shipping);	
 		
-		Document itemDetail = new Document("sku",sku)
+		Document itemDetail = new Document("sku",stockKeepingUnit)
 		.append("name",item)
 		.append("quantity",quantity)
-		.append("unit_price",unit_price);
+		.append("unit_price",unitPrice);
 		List items = Arrays.asList(itemDetail);
 		newOrder.put("lineitems", items);
 		
@@ -305,5 +293,6 @@ public class InsertData {
 			return null;							
 		}
 	}
+	
 }
 
