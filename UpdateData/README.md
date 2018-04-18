@@ -43,24 +43,24 @@ The sample application demonstrates deletion of data from a MongoDB Atlas free-t
 
 ## Description 
 
-### Update One - UpdateOneOrder
+### Update One - UpdateSubtotalShippingTaxBasedOnTotal
 
 ```java
 			Document newDocument = new Document();
-			newDocument.append("$set", new Document().append("subtotal", subtotal));
+			newDocument.append("$set", new Document().append("subtotal", subtotal).append("shipping",shipping).append("tax",tax));
 
 			Document updateQuery = new Document().append("total", total);
 
 			collection.updateOne(updateQuery, newDocument);
 ```
 
-This method illustrates updating one order. It takes *total* and *subtotal* as parameters and updates the first document with total equal to parameter, using the $set operator to update the subtotal field with parameter passed.
+This method illustrates updating one order. It takes *total*, *subtotal*, *shipping* and *tax* as parameters and updates the first document where total matches the parameter. It uses the $set operator to update the subtotal, shipping and tax fields with parameters passed.
 
 ```java
-	public List<Document> UpdateOneOrder(String connectionString, Double total, Double subtotal)
+	public List<Document> UpdateSubtotalShippingTaxBasedOnTotal(String connectionString, Double total, Double subtotal, Double shipping, Double tax)
 	{
 
-		if(connectionString == null || connectionString.isEmpty() || total <= 0 || subtotal <= 0)
+		if(connectionString == null || connectionString.isEmpty() || total <= 0 || subtotal <= 0 || shipping <= 0 || tax <= 0)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -73,14 +73,14 @@ This method illustrates updating one order. It takes *total* and *subtotal* as p
 			MongoCollection<Document> collection = database.getCollection("orders");	
 	
 			Document newDocument = new Document();
-			newDocument.append("$set", new Document().append("subtotal", subtotal));
+			newDocument.append("$set", new Document().append("subtotal", subtotal).append("shipping",shipping).append("tax",tax));
 
 			Document updateQuery = new Document().append("total", total);
 
 			collection.updateOne(updateQuery, newDocument);
 			
 	        List<Document> queryResult = collection
-	        		.find(and(eq("total",total),eq("subtotal",subtotal)))
+	        		.find(and(eq("total",total),eq("subtotal",subtotal),eq("shipping",shipping),eq("tax",tax)))
 	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
@@ -90,14 +90,14 @@ This method illustrates updating one order. It takes *total* and *subtotal* as p
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
 	}
 ```
 
-### Update One for a Nested field - UpdateOneOrderForEmbeddedField
+### Update One for an Embedded field - UpdateNameBasedOnSKU
 
 ```java
 			Document newDocument = new Document();
@@ -108,10 +108,10 @@ This method illustrates updating one order. It takes *total* and *subtotal* as p
 			collection.updateOne(updateQuery, newDocument);
 ```
 
-This method illustrates updating one order for a nested field. It takes *lineitems - stockKeepingUnit* and *lineitems - name* as parameters and updates the first document with stockKeepingUnit equal to parameter, using the $set operator to update the name field with parameter passed.
+This method illustrates updating one order for an embedded field. It takes *lineitems - stockKeepingUnit* and *lineitems - name* as parameters and updates the first document where stockKeepingUnit matches the parameter. It uses the $set operator to update the name field with parameter passed.
 
 ```java
-	public List<Document> UpdateOneOrderForEmbeddedField(String connectionString, String stockKeepingUnit, String name)
+	public List<Document> UpdateNameBasedOnSKU(String connectionString, String stockKeepingUnit, String name)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || name == null || name.isEmpty())
@@ -144,7 +144,7 @@ This method illustrates updating one order for a nested field. It takes *lineite
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
@@ -152,7 +152,7 @@ This method illustrates updating one order for a nested field. It takes *lineite
 
 ```
 
-### Update Many using operator $gt - UpdateManyOrdersWithOperator
+### Update Many using operator $gt - UpdateTaxBasedOnTotalForManyOrders
 
 ```java
 			Document newDocument = new Document();
@@ -164,10 +164,10 @@ This method illustrates updating one order for a nested field. It takes *lineite
 			collection.updateMany(updateQuery, newDocument);
 ```
 
-This method illustrates updating many orders with an operator. It takes *total* and *tax* as parameters and updates all documents with total greater than the parameter, using the $set operator to update the tax field with parameter passed.
+This method illustrates updating many orders with an operator. It takes *total* and *tax* as parameters and updates all documents with total greater than the parameter. It uses the $set operator to update the tax field with parameter passed.
 
 ```java
-	public List<Document> UpdateManyOrdersWithOperator(String connectionString, Double total, Double tax)
+	public List<Document> UpdateTaxBasedOnTotalForManyOrders(String connectionString, Double total, Double tax)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || total <= 0 || tax <= 0)
@@ -201,7 +201,7 @@ This method illustrates updating many orders with an operator. It takes *total* 
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
@@ -222,7 +222,7 @@ This method illustrates updating many orders with an operator. It takes *total* 
 This method illustrates updating many orders with nested fields. It takes *lineitems - stockKeepingUnit * and *lineitems - unitPrice* as parameters and updates all documents with stockKeepingUnit equal to the parameter, using the $set operator to update the unitPrice field with parameter passed.
 
 ```java
-	public List<Document> UpdateManyOrdersForEmbeddedField(String connectionString, String stockKeepingUnit, Double unitPrice)
+	public List<Document> UpdateUnitPriceBasedOnSKUForManyOrders(String connectionString, String stockKeepingUnit, Double unitPrice)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || unitPrice <= 0)
@@ -255,13 +255,11 @@ This method illustrates updating many orders with nested fields. It takes *linei
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
 	}
-}
-
 ```
 
 ## Running the tests
@@ -288,11 +286,11 @@ This unit test verifies connection to MongoDB Atlas cluster.
 	}
 ```
 
-These unit tests verify the UpdateOneOrder method. Valid scenarios along with edge cases like invalid connection string, invalid total and invalid subtotal are verified. 
+These unit tests verify the UpdateSubtotalShippingTaxBasedOnTotal method. Valid scenarios along with edge cases like invalid connection string, invalid total, invalid subtotal, invalid shippind and invalid tax are verified. 
 
 ```java
 	@Test
-	public void UpdateOneOrderTest() {
+	public void UpdateSubtotalShippingTaxBasedOnTotalTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -301,69 +299,91 @@ These unit tests verify the UpdateOneOrder method. Valid scenarios along with ed
 		MongoCollection<Document> collection = database.getCollection("orders");
 		
         List<Document> queryResult1 = collection
-        		.find(and(eq("total", 406.0701),eq("subtotal", 70.87)))
+        		.find(and(eq("total", 406.0701),eq("subtotal", 70.87),eq("shipping",226),eq("tax",67.9352)))
         		.into(new ArrayList<Document>());
                 
         //verify original record
 	    Document result1 = queryResult1.get(0);
 	    String id1 = result1.getString("_id");
 	    Double subtotal1 = result1.getDouble("subtotal");
+	    Double shipping1 = result1.getDouble("shipping");
+	    Double tax1 = result1.getDouble("tax");
 	    assertEquals("5a989e4ae0d1351062640fdc", id1);
 	    assertEquals(70.87, subtotal1, 0.00);
+	    assertEquals(226, shipping1, 0.00);
+	    assertEquals(67.9352, tax1, 0.00);
 	    
 	    //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, 100.23);
+		List<Document> queryResult2 = updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, 56.12);
 		assertEquals(1, queryResult2.size());	
 		
 		//verify updated record
 	    Document result2 = queryResult2.get(0);
 	    String id2 = result2.getString("_id");
 	    Double subtotal2 = result2.getDouble("subtotal");
+	    Double shipping2 = result2.getDouble("shipping");
+	    Double tax2 = result2.getDouble("tax");
 	    assertEquals("5a989e4ae0d1351062640fdc", id2);
 	    assertEquals(100.23, subtotal2, 0.00);
+	    assertEquals(200.23, shipping2, 0.00);
+	    assertEquals(56.12, tax2, 0.00);
 	    
 	    //revert to original value
-	    List<Document> queryResult3 = updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, 70.87);
+	    List<Document> queryResult3 = updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 70.87, 226.0, 67.9352);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder("", 406.0701, 100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal("", 406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidTotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, -406.0701, 100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, -406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidSubtotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, -100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, -100.23, 200.23, 56.12);	    
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void UpdateOneOrderTest_InvalidShipping_ThrowsException() 
+	{
+		UpdateData updateData = new UpdateData();	
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, -200.23, 56.12);	    
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void UpdateOneOrderTest_InvalidTax_ThrowsException() 
+	{
+		UpdateData updateData = new UpdateData();	
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, -56.12);	    
 	}
 	
 	@Test
 	public void UpdateOneOrderTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, 555.555, 100.00);
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 555.555, 100.00, 200.20, 56.50);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
 ```
 
-These unit tests verify the UpdateOneOrderForEmbeddedField method. Valid scenarios along with edge cases like invalid connection string, invalid/empty stockKeepingUnit and invalid/empty name are verified.
+These unit tests verify the UpdateNameBasedOnSKUTest method. Valid scenarios along with edge cases like invalid connection string, invalid/empty stockKeepingUnit and invalid/empty name are verified.
 
 ```java
 	@Test
-	public void UpdateOneOrderForEmbeddedFieldTest() {
+	public void UpdateNameBasedOnSKUTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -390,7 +410,7 @@ These unit tests verify the UpdateOneOrderForEmbeddedField method. Valid scenari
 		
 	    //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "Medium Duty Blender");
+		List<Document> queryResult2 = updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "Medium Duty Blender");
 		assertEquals(1, queryResult2.size());	
 		
 		//verify updated record		
@@ -407,46 +427,46 @@ These unit tests verify the UpdateOneOrderForEmbeddedField method. Valid scenari
 	    assertEquals("Medium Duty Blender", name2);
 	    
 	    //revert to original value
-	    List<Document> queryResult3 = updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "1.6 oz. Vitamin C Serum");
+	    List<Document> queryResult3 = updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "1.6 oz. Vitamin C Serum");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField("", "MDBTS134", "Medium Duty Blender");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU("", "MDBTS134", "Medium Duty Blender");	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_EmptySku_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "", "Medium Duty Blender");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "", "Medium Duty Blender");	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_EmptyName_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "");	    
 	}
 	
 	@Test
 	public void UpdateOneOrderForEmbeddedFieldTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "GBPX8634", "Medium Duty Blender");
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "GBPX8634", "Medium Duty Blender");
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
 ```
 
-These unit tests verify the UpdateManyOrdersWithOperator method. Valid scenarios along with edge cases like invalid connection string, invalid total and invalid tax are verified.
+These unit tests verify the UpdateTaxBasedOnTotalForManyOrders method. Valid scenarios along with edge cases like invalid connection string, invalid total and invalid tax are verified.
 
 ```java
 	@Test
-	public void UpdateManyOrdersWithOperatorTest() {
+	public void UpdateTaxBasedOnTotalForManyOrdersTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -470,7 +490,7 @@ These unit tests verify the UpdateManyOrdersWithOperator method. Valid scenarios
 		
 		//update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 2300.00, 230.00);
+		List<Document> queryResult2 = updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 2300.00, 230.00);
 		assertEquals(4, queryResult2.size());	
 		
 		//verify updated record
@@ -508,44 +528,44 @@ These unit tests verify the UpdateManyOrdersWithOperator method. Valid scenarios
 		collection.updateOne(updateQuery4, newDocument4);
 
 	}
-```
-
-These unit tests verify the UpdateManyOrdersForEmbeddedField method. Valid scenarios along with edge cases like invalid connection string, invalid/empty stockKeepingUnit and invalid unitPrice are verified.
-
-```java
+		
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersWithOperatorTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator("", 2300.00, 230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders("", 2300.00, 230.00);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersWithOperatorTest_InvalidTotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, -2300.00, 230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, -2300.00, 230.00);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersWithOperatorTest_InvalidTax_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 2300.00, -230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 2300.00, -230.00);	    
 	}
 	
 	@Test
 	public void UpdateManyOrdersWithOperatorTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 5000.00, 500.00);
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 5000.00, 500.00);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
-	
+```
+
+These unit tests verify the UpdateUnitPriceBasedOnSKUForManyOrders method. Valid scenarios along with edge cases like invalid connection string, invalid/empty stockKeepingUnit and invalid unitPrice are verified.
+
+```java
 	@Test
-	public void UpdateManyOrdersForEmbeddedFieldTest() {
+	public void UpdateUnitPriceBasedOnSKUForManyOrdersTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -574,7 +594,7 @@ These unit tests verify the UpdateManyOrdersForEmbeddedField method. Valid scena
 		
         //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", 70.23);
+		List<Document> queryResult2 = updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "MDBTS244", 70.23);
 		assertEquals(2, queryResult2.size());	
 		
 		//verify updated record
@@ -611,31 +631,30 @@ These unit tests verify the UpdateManyOrdersForEmbeddedField method. Valid scena
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField("", "MDBTS244", 70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders("", "MDBTS244", 70.23);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersForEmbeddedFieldTest_EmptySku_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "", 70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "", 70.23);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidUnitPrice_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", -70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "MDBTS244", -70.23);	    
 	}
 	
 	@Test
 	public void UpdateManyOrdersForEmbeddedFieldTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "GBPX8634", 70.23);
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "GBPX8634", 70.23);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
-}
 ```
