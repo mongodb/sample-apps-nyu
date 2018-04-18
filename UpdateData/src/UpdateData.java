@@ -22,10 +22,10 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateOneOrder(String connectionString, Double total, Double subtotal)
+	public List<Document> UpdateSubtotalShippingBasedOnTotal(String connectionString, Double total, Double subtotal, Double shipping, Double tax)
 	{
 
-		if(connectionString == null || connectionString.isEmpty() || total <= 0 || subtotal <= 0)
+		if(connectionString == null || connectionString.isEmpty() || total <= 0 || subtotal <= 0 || shipping <= 0 || tax <= 0)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -38,7 +38,7 @@ public class UpdateData {
 			MongoCollection<Document> collection = database.getCollection("orders");	
 	
 			Document newDocument = new Document();
-			newDocument.append("$set", new Document().append("subtotal", subtotal));
+			newDocument.append("$set", new Document().append("subtotal", subtotal).append("shipping",shipping).append("tax",tax));
 
 			Document updateQuery = new Document().append("total", total);
 
@@ -55,7 +55,7 @@ public class UpdateData {
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
@@ -69,7 +69,7 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateOneOrderForEmbeddedField(String connectionString, String stockKeepingUnit, String name)
+	public List<Document> UpdateNameBasedOnSKU(String connectionString, String stockKeepingUnit, String name)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || name == null || name.isEmpty())
@@ -102,7 +102,7 @@ public class UpdateData {
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
@@ -116,7 +116,7 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateManyOrdersWithOperator(String connectionString, Double total, Double tax)
+	public List<Document> UpdateTaxBasedOnTotalForManyOrders(String connectionString, Double total, Double tax)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || total <= 0 || tax <= 0)
@@ -150,7 +150,7 @@ public class UpdateData {
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}
@@ -164,7 +164,7 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateManyOrdersForEmbeddedField(String connectionString, String stockKeepingUnit, Double unitPrice)
+	public List<Document> UpdateUnitPriceBasedOnSKUForManyOrders(String connectionString, String stockKeepingUnit, Double unitPrice)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || stockKeepingUnit == null || stockKeepingUnit.isEmpty() || unitPrice <= 0)
@@ -197,7 +197,7 @@ public class UpdateData {
 			
 			System.out.println("An exception occured");
 			System.out.println("Details:");
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return null;
 							
 		}

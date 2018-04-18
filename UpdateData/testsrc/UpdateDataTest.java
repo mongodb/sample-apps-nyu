@@ -31,7 +31,7 @@ public class UpdateDataTest {
 	}
 	
 	@Test
-	public void UpdateOneOrderTest() {
+	public void UpdateSubtotalShippingBasedOnTotalTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -40,65 +40,87 @@ public class UpdateDataTest {
 		MongoCollection<Document> collection = database.getCollection("orders");
 		
         List<Document> queryResult1 = collection
-        		.find(and(eq("total", 406.0701),eq("subtotal", 70.87)))
+        		.find(and(eq("total", 406.0701),eq("subtotal", 70.87),eq("shipping",226),eq("tax",67.9352)))
         		.into(new ArrayList<Document>());
                 
         //verify original record
 	    Document result1 = queryResult1.get(0);
 	    String id1 = result1.getString("_id");
 	    Double subtotal1 = result1.getDouble("subtotal");
+	    Double shipping1 = result1.getDouble("shipping");
+	    Double tax1 = result1.getDouble("tax");
 	    assertEquals("5a989e4ae0d1351062640fdc", id1);
 	    assertEquals(70.87, subtotal1, 0.00);
+	    assertEquals(226, shipping1, 0.00);
+	    assertEquals(67.9352, tax1, 0.00);
 	    
 	    //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, 100.23);
+		List<Document> queryResult2 = updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, 56.12);
 		assertEquals(1, queryResult2.size());	
 		
 		//verify updated record
 	    Document result2 = queryResult2.get(0);
 	    String id2 = result2.getString("_id");
 	    Double subtotal2 = result2.getDouble("subtotal");
+	    Double shipping2 = result2.getDouble("shipping");
+	    Double tax2 = result2.getDouble("tax");
 	    assertEquals("5a989e4ae0d1351062640fdc", id2);
 	    assertEquals(100.23, subtotal2, 0.00);
+	    assertEquals(200.23, shipping2, 0.00);
+	    assertEquals(56.12, tax2, 0.00);
 	    
 	    //revert to original value
-	    List<Document> queryResult3 = updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, 70.87);
+	    List<Document> queryResult3 = updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 70.87, 226.0, 67.9352);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder("", 406.0701, 100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal("", 406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidTotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, -406.0701, 100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, -406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidSubtotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, 406.0701, -100.23);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, -100.23, 200.23, 56.12);	    
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void UpdateOneOrderTest_InvalidShipping_ThrowsException() 
+	{
+		UpdateData updateData = new UpdateData();	
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, -200.23, 56.12);	    
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void UpdateOneOrderTest_InvalidTax_ThrowsException() 
+	{
+		UpdateData updateData = new UpdateData();	
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, -56.12);	    
 	}
 	
 	@Test
 	public void UpdateOneOrderTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrder(CONNECTION_STRING, 555.555, 100.00);
+		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 555.555, 100.00, 200.20, 56.50);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
 	
 	@Test
-	public void UpdateOneOrderForEmbeddedFieldTest() {
+	public void UpdateNameBasedOnSKUTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -125,7 +147,7 @@ public class UpdateDataTest {
 		
 	    //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "Medium Duty Blender");
+		List<Document> queryResult2 = updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "Medium Duty Blender");
 		assertEquals(1, queryResult2.size());	
 		
 		//verify updated record		
@@ -142,42 +164,42 @@ public class UpdateDataTest {
 	    assertEquals("Medium Duty Blender", name2);
 	    
 	    //revert to original value
-	    List<Document> queryResult3 = updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "1.6 oz. Vitamin C Serum");
+	    List<Document> queryResult3 = updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "1.6 oz. Vitamin C Serum");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField("", "MDBTS134", "Medium Duty Blender");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU("", "MDBTS134", "Medium Duty Blender");	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_EmptySku_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "", "Medium Duty Blender");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "", "Medium Duty Blender");	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderForEmbeddedFieldTest_EmptyName_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "MDBTS134", "");	    
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "MDBTS134", "");	    
 	}
 	
 	@Test
 	public void UpdateOneOrderForEmbeddedFieldTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateOneOrderForEmbeddedField(CONNECTION_STRING, "GBPX8634", "Medium Duty Blender");
+		List<Document> queryResult =updateData.UpdateNameBasedOnSKU(CONNECTION_STRING, "GBPX8634", "Medium Duty Blender");
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
 	
 	@Test
-	public void UpdateManyOrdersWithOperatorTest() {
+	public void UpdateTaxBasedOnTotalForManyOrdersTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -201,7 +223,7 @@ public class UpdateDataTest {
 		
 		//update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 2300.00, 230.00);
+		List<Document> queryResult2 = updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 2300.00, 230.00);
 		assertEquals(4, queryResult2.size());	
 		
 		//verify updated record
@@ -244,35 +266,35 @@ public class UpdateDataTest {
 	public void UpdateManyOrdersWithOperatorTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator("", 2300.00, 230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders("", 2300.00, 230.00);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersWithOperatorTest_InvalidTotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, -2300.00, 230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, -2300.00, 230.00);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersWithOperatorTest_InvalidTax_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 2300.00, -230.00);	    
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 2300.00, -230.00);	    
 	}
 	
 	@Test
 	public void UpdateManyOrdersWithOperatorTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersWithOperator(CONNECTION_STRING, 5000.00, 500.00);
+		List<Document> queryResult =updateData.UpdateTaxBasedOnTotalForManyOrders(CONNECTION_STRING, 5000.00, 500.00);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
 	}
 	
 	@Test
-	public void UpdateManyOrdersForEmbeddedFieldTest() {
+	public void UpdateUnitPriceBasedOnSKUForManyOrdersTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -301,7 +323,7 @@ public class UpdateDataTest {
 		
         //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", 70.23);
+		List<Document> queryResult2 = updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "MDBTS244", 70.23);
 		assertEquals(2, queryResult2.size());	
 		
 		//verify updated record
@@ -338,28 +360,28 @@ public class UpdateDataTest {
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField("", "MDBTS244", 70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders("", "MDBTS244", 70.23);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersForEmbeddedFieldTest_EmptySku_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "", 70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "", 70.23);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateManyOrdersForEmbeddedFieldTest_InvalidUnitPrice_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "MDBTS244", -70.23);	    
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "MDBTS244", -70.23);	    
 	}
 	
 	@Test
 	public void UpdateManyOrdersForEmbeddedFieldTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateManyOrdersForEmbeddedField(CONNECTION_STRING, "GBPX8634", 70.23);
+		List<Document> queryResult =updateData.UpdateUnitPriceBasedOnSKUForManyOrders(CONNECTION_STRING, "GBPX8634", 70.23);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  
