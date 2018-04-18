@@ -1,0 +1,35 @@
+
+  {
+    "_id": "3a333e3a3a33cc333fb3f33c"
+    "orderPlaced": "2018-03-11",
+    "total": 150.23,
+    "subtotal": 12.4,
+    "shipping": 40,
+    "tax": 58.5,
+    "status": [
+      "shipped",
+      "2018-3-23"
+    ],
+    "shippingAddress": {
+      "number": 413,
+      "street": "Roadway",
+      "city": "Los Angeles",
+      "state": "Califonia",
+      "country": "USA",
+      "postalCode": 49491
+    },
+    "lineitems": [
+      {
+        "sku": "MSDR232",
+        "name": "Table Stand",
+        "quantity": 4,
+        "unit_price": 58.34
+      },
+      {
+        "sku": "MGER9921",
+        "name": "Table Lamp",
+        "quantity": 25,
+        "unit_price": 583.4
+      }
+    ]
+  }
