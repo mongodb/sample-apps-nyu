@@ -19,6 +19,8 @@ public class UpdateData {
 	 * @param connectionString: To MongoDB instance/MongoDB Cluster.
 	 * @param total: Total of the document that is to be updated.
 	 * @param subtotal: The subtotal of the document whose total is passed is updated with this value.
+	 * @param shipping: The shipping of the document whose total is passed is updated with this value.
+	 * @param tax: The tax of the document whose total is passed is updated with this value.
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
