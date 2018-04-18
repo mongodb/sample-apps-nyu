@@ -47,7 +47,7 @@ public class UpdateData {
 			collection.updateOne(updateQuery, newDocument);
 			
 	        List<Document> queryResult = collection
-	        		.find(and(eq("total",total),eq("subtotal",subtotal)))
+	        		.find(and(eq("total",total),eq("subtotal",subtotal),eq("shipping",shipping),eq("tax",tax)))
 	        		.into(new ArrayList<Document>());
 			return queryResult;
 		}
