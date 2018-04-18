@@ -31,7 +31,7 @@ public class UpdateDataTest {
 	}
 	
 	@Test
-	public void UpdateSubtotalShippingBasedOnTotalTest() {
+	public void UpdateSubtotalShippingTaxBasedOnTotalTest() {
 		
 		MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 		MongoClient client = new MongoClient(clientUri);
@@ -56,7 +56,7 @@ public class UpdateDataTest {
 	    
 	    //update data
 		UpdateData updateData = new UpdateData();		
-		List<Document> queryResult2 = updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, 56.12);
+		List<Document> queryResult2 = updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, 56.12);
 		assertEquals(1, queryResult2.size());	
 		
 		//verify updated record
@@ -71,49 +71,49 @@ public class UpdateDataTest {
 	    assertEquals(56.12, tax2, 0.00);
 	    
 	    //revert to original value
-	    List<Document> queryResult3 = updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 70.87, 226.0, 67.9352);
+	    List<Document> queryResult3 = updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 70.87, 226.0, 67.9352);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidConnectionString_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal("", 406.0701, 100.23, 200.23, 56.12);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal("", 406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidTotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, -406.0701, 100.23, 200.23, 56.12);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, -406.0701, 100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidSubtotal_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, -100.23, 200.23, 56.12);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, -100.23, 200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidShipping_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, -200.23, 56.12);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, -200.23, 56.12);	    
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void UpdateOneOrderTest_InvalidTax_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, -56.12);	    
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 406.0701, 100.23, 200.23, -56.12);	    
 	}
 	
 	@Test
 	public void UpdateOneOrderTest_ValidArguments_SuccessWithNoRecords_ThrowsException() 
 	{
 		UpdateData updateData = new UpdateData();	
-		List<Document> queryResult =updateData.UpdateSubtotalShippingBasedOnTotal(CONNECTION_STRING, 555.555, 100.00, 200.20, 56.50);
+		List<Document> queryResult =updateData.UpdateSubtotalShippingTaxBasedOnTotal(CONNECTION_STRING, 555.555, 100.00, 200.20, 56.50);
 		
 		 //verify size
 	    assertEquals(0, queryResult.size());  

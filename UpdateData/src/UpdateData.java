@@ -24,7 +24,7 @@ public class UpdateData {
 	 * @return List<Document>: ArrayList of matching documents.
 	 */
 	
-	public List<Document> UpdateSubtotalShippingBasedOnTotal(String connectionString, Double total, Double subtotal, Double shipping, Double tax)
+	public List<Document> UpdateSubtotalShippingTaxBasedOnTotal(String connectionString, Double total, Double subtotal, Double shipping, Double tax)
 	{
 
 		if(connectionString == null || connectionString.isEmpty() || total <= 0 || subtotal <= 0 || shipping <= 0 || tax <= 0)
