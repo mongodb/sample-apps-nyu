@@ -62,8 +62,7 @@ Additional information on connecting to MongoDB can be found [here](http://mongo
 
 1. Download the files ArrayQuery.java and the test file ArrayQueryTest.java 
 2. Build the project.
-Use the following command to import the example dataset on to your MondoDB instance.
-
+3. Refer [README documentation](https://github.com/mongodb/sample-apps-nyu/blob/master/ArrayQuery/README.md) for the code explanation
 
 
 ## Summary
