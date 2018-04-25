@@ -59,15 +59,15 @@ Additional information on connecting to MongoDB can be found [here](http://mongo
 
 ## Procedure
 [a list of steps required to complete the task, with code example references indicated. Please note that all code examples need to follow our include paradigm and reside in github.com]
-ENTIRE MARKDOWN FILE
-Download the files ArrayQuery.java and the test file ArrayQueryTest.java 
-Build the project.
+
+1. Download the files ArrayQuery.java and the test file ArrayQueryTest.java 
+2. Build the project.
 Use the following command to import the example dataset on to your MondoDB instance.
 
 
 
 ## Summary
-[summarize for the user what they have accomplished]
+This guide helps you understand how to retrieve data from array-ed database using various operators.
 
 ## What’s Next
 * See how to [**Query embedded documents**](https://github.com/mongodb/sample-apps-nyu/tree/master/EmbeddedDocumentsQuery).
