@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="D:/Courses-NYU/ITP/MongoDB Java Drivers/mongodb-driver-3.6.3.jar"/>
 	<classpathentry kind="lib" path="D:/Courses-NYU/ITP/MongoDB Java Drivers/mongodb-driver-core-3.6.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path="testsrc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
