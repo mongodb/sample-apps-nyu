@@ -1,4 +1,4 @@
-# MongoDB Java Driver Find Method within Arrays
+# MongoDB Java Driver Insert Functionality
 This is a sample application that demonstrates MongoDB Java Driver's insert functionality. It has four methods:
 
 - one that illustrates the use of insertOne() by passing order values
