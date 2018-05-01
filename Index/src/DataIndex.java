@@ -39,27 +39,27 @@ public class DataIndex {
 			MongoCollection<Document> collection = database.getCollection("orders");		
 			
 			
-			//checking what all are indexes
+			//check the current indexes
 			for (Document index : collection.listIndexes()) {
 			    System.out.println(index.toJson());
 			}
 			
 			//runs a query without index
-			Document query =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain",true)).first();
-				System.out.println(query);
+			Document noIndexQuery =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain",true)).first();
+			System.out.println(noIndexQuery);
 				
 			//create index
 			collection.createIndex(Indexes.ascending("shippingAddress.state"));
-			//checking what all are indexes
+			//check the current indexes
 			for (Document index : collection.listIndexes()) {
 				   System.out.println(index.toJson());
 			}
 			
 			
 			//runs a query with index	
-			Document query2 =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain", true)).first();
+			Document indexQuery =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain", true)).first();
+			System.out.println(indexQuery);
 			
-			System.out.println(query2);
 			
 			//drop the index
 			collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
