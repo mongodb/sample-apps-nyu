@@ -30,9 +30,10 @@ Java app to import example dataset on to MongoDB database.
 ## Consideration
 1. Get the correct connection string to your MongoDB instance.
 2. Get the correct file path on your local machine to ExampleDataset.json.
+3. Make sure MongoDB Java libraries are set up appropriately and are accessible at run time.
 
 ## Procedure
-1. Build the project.
+1. Build the project. Preferably, as a runnable jar including all the neccessary libraries. Runnable jar file would require a run configuration. Set up one for this project by selecting the appropriate main method.
 2. Use the following command to import the example dataset on to your MondoDB instance.
 ```
 java -jar InsertExampleDataset.jar <Connection String> exampleDataset.json
