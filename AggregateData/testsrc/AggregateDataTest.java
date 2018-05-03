@@ -32,7 +32,7 @@ public class AggregateDataTest {
 	}
 		
 		@Test
-		public void AggregateByStateTest() {
+		public void AggregateByState_ValidArguments_SuccessWithRecords() {
 			
 			MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 			MongoClient client = new MongoClient(clientUri);
@@ -60,21 +60,21 @@ public class AggregateDataTest {
 		}
 		 
 		@Test(expected=IllegalArgumentException.class)
-		public void AggregateByStateTest_InvalidConnectionString_ThrowsException() {
+		public void AggregateByState_InvalidConnectionString_ThrowsException() {
 			
 				AggregateData aggregateData = new AggregateData();	
 				List<Document> queryResult = aggregateData.AggregateByState("", "Texas");	    
 			}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void AggregateByStateTest_InvalidState_ThrowsException() {
+		public void AggregateByState_InvalidState_ThrowsException() {
 			
 			AggregateData aggregateData = new AggregateData();	
 			List<Document> queryResult = aggregateData.AggregateByState(CONNECTION_STRING, "");    
 		}
 		
 		@Test
-		public void AggregateByStateTest_ValidArguments_SuccessWithNoRecords_ThrowsException() {
+		public void AggregateByState_ValidArguments_SuccessWithNoRecords_ThrowsException() {
 			
 			AggregateData aggregateData = new AggregateData();	
 			List<Document> queryResult = aggregateData.AggregateByState(CONNECTION_STRING, "Quebec");
@@ -85,7 +85,7 @@ public class AggregateDataTest {
 		}
 		
 		@Test
-		public void AggregateByStateAverageShippingTest() {
+		public void AggregateByStateAverageShipping_ValidArguments_SuccessWithRecords() {
 			
 			MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 			MongoClient client = new MongoClient(clientUri);
@@ -120,21 +120,21 @@ public class AggregateDataTest {
 		}
 		 
 		@Test(expected=IllegalArgumentException.class)
-		public void AggregateByStateAverageShippingTest_InvalidConnectionString_ThrowsException() {
+		public void AggregateByStateAverageShipping_InvalidConnectionString_ThrowsException() {
 			
 				AggregateData aggregateData = new AggregateData();	
 				List<Document> queryResult = aggregateData.AggregateByState("", "Texas");	    
 			}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void AggregateByStateAverageShippingTest_InvalidState_ThrowsException() {
+		public void AggregateByStateAverageShipping_InvalidState_ThrowsException() {
 			
 			AggregateData aggregateData = new AggregateData();	
 			List<Document> queryResult = aggregateData.AggregateByState(CONNECTION_STRING, "");    
 		}
 		
 		@Test
-		public void AggregateByStateAverageShippingTest_ValidArguments_SuccessWithNoRecords_ThrowsException() {
+		public void AggregateByStateAverageShipping_ValidArguments_SuccessWithNoRecords_ThrowsException() {
 			
 			AggregateData aggregateData = new AggregateData();	
 			List<Document> queryResult = aggregateData.AggregateByState(CONNECTION_STRING, "Quebec"); 
@@ -145,7 +145,7 @@ public class AggregateDataTest {
 		}
 		
 		@Test
-		public void AggregateByCityCheckStatusTest() {
+		public void AggregateByCityCheckStatus_ValidArguments_SuccessWithRecords() {
 			
 			MongoClientURI clientUri = new MongoClientURI(CONNECTION_STRING);
 			MongoClient client = new MongoClient(clientUri);
