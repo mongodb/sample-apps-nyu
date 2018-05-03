@@ -30,7 +30,7 @@ public class DataIndexTest {
 		}
 		
 		@Test
-		public void checkIndexBefore()
+		public void GetShippingByCityWithoutIndexTest()
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithoutIndex(connectionString,city);
@@ -42,7 +42,7 @@ public class DataIndexTest {
 		}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void checkIndexBefore_InvalidConnectionString_ThrowsException() 
+		public void GetShippingByCityWithoutIndexTest_InvalidConnectionString_ThrowsException() 
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithoutIndex("",city);
@@ -50,7 +50,7 @@ public class DataIndexTest {
 		}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void checkIndexBefore_emptyValue_ThrowsException() 
+		public void GetShippingByCityWithoutIndexTest_emptyValue_ThrowsException() 
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithoutIndex(connectionString,"");
@@ -59,7 +59,7 @@ public class DataIndexTest {
 		
 		
 		@Test
-		public void checkIndexSizeAfter()
+		public void GetShippingByCityWithIndexTest()
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithIndex(connectionString,city);
@@ -70,7 +70,7 @@ public class DataIndexTest {
 		}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void checkIndexSizeAfter_InvalidConnectionString_ThrowsException() 
+		public void GetShippingByCityWithIndexTest_InvalidConnectionString_ThrowsException() 
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithoutIndex("",city);
@@ -78,7 +78,7 @@ public class DataIndexTest {
 		}
 		
 		@Test(expected=IllegalArgumentException.class)
-		public void checkIndexSizeAfter_emptyValue_ThrowsException() 
+		public void GetShippingByCityWithIndexTest_emptyValue_ThrowsException() 
 		{
 			DataIndex d_index = new DataIndex();	
 			List<Document> filteredDocuments = d_index.GetShippingByCityWithoutIndex(connectionString,"");
