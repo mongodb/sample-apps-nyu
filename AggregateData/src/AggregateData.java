@@ -17,6 +17,13 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
 
 public class AggregateData {
+	
+		/**
+		 * Aggregates data in the collection and calculates count using aggregate()
+		 * @param connectionString: To MongoDB instance/MongoDB Cluster.
+		 * @param state: shippingAddress - state of the document that is to be aggregated.
+		 * @return List<Document>: ArrayList of documents with *shippingAddress - city* and its count.
+		 */
 		
 		public List<Document> AggregateByState(String connectionString, String state){
 			if(connectionString == null || connectionString.isEmpty() || state == null || state.isEmpty())
@@ -49,6 +56,13 @@ public class AggregateData {
 				}	
 			}			
 		}
+		
+		/**
+		 * Aggregates data in the collection and calculates average using aggregate()
+		 * @param connectionString: To MongoDB instance/MongoDB Cluster.
+		 * @param state: shippingAddress - state of the document that is to be aggregated.
+		 * @return List<Document>: ArrayList of document with *shippingAddress - state* and its average *shipping*.
+		 */
 	
 		public List<Document> AggregateByStateAverageShipping(String connectionString, String state){
 			if(connectionString == null || connectionString.isEmpty() || state == null || state.isEmpty())
@@ -83,6 +97,11 @@ public class AggregateData {
 			}			
 		}
 	
+		/**
+		 * Aggregates data in the collection and uses various Projections methods to build the $project stage
+		 * @param connectionString: To MongoDB instance/MongoDB Cluster.
+		 * @return List<Document>: ArrayList of documents with Projected fields, shippingAddress - city and first element of the array, status 
+		 */
 	
 		public List<Document> AggregateByCityCheckStatus(String connectionString){
 			if(connectionString == null || connectionString.isEmpty())
