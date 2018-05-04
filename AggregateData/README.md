@@ -10,7 +10,7 @@ This is a sample application that demonstrates MongoDB Java Driver's Aggregation
 
 ## Getting Started
 
-The sample application demonstrates deletion of data from a MongoDB Atlas free-tier cluster. The cluster contains stores.orders collection which mimics an e-commerce database. The general schema is as follows: 
+The sample application demonstrates aggregation of data from a MongoDB Atlas free-tier cluster. The cluster contains stores.orders collection which mimics an e-commerce database. The general schema is as follows: 
 
 ```js
 {
