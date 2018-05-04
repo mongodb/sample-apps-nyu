@@ -39,8 +39,6 @@ public class DataIndex {
 		}
 		catch (Exception e) {
 			//log the exception
-			
-<<<<<<< HEAD
 			System.out.println("An exception occured");
 			System.out.println("Details:");
 			e.printStackTrace();
@@ -67,10 +65,10 @@ public class DataIndex {
 			collection.createIndex(Indexes.ascending("shippingAddress.state"));
 		
 			//runs a query with index
-			List<Document> noIndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).into(new ArrayList<Document>());
-			return noIndexQuery;
+			List<Document> IndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).into(new ArrayList<Document>());
+			return IndexQuery;
 		
-=======
+
 			//check the current indexes
 			for (Document index : collection.listIndexes()) {
 			    System.out.println(index.toJson());
@@ -104,7 +102,7 @@ public class DataIndex {
 			
 			
 			return null;
->>>>>>> b50f0132bd90d4173eb2ee998c3627d8cd5910c1
+
 			
 		}
 		catch (Exception e) {
