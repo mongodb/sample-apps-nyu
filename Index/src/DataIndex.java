@@ -103,8 +103,19 @@ public class DataIndex {
 			   line++;
 			   queryResult = index.toJson();
 			}
+			return line;
 		}
-		return line;
+		
+		
+		catch (Exception e) {
+			//log the exception
+			
+			System.out.println("An exception occured");
+			System.out.println("Details:");
+			e.printStackTrace();
+			return 0;
+							
+		}	
 	}
 	
 	public int dropIndex(String connectionString, String city)
@@ -122,9 +133,18 @@ public class DataIndex {
 		
 		//drop the index
 		collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
-	
-		}
 		return 0;
+		}
+
+		catch (Exception e) {
+			//log the exception
+			
+			System.out.println("An exception occured");
+			System.out.println("Details:");
+			e.printStackTrace();
+			return 0;
+							
+		}
 		
 	}
 }
