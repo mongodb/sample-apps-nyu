@@ -37,38 +37,75 @@ The sample application queries data from MongoDB Atlas free-tier cluster. The cl
 
 ## Description
 
-### GetShippingByCity
+### GetShippingByCityWithoutIndex
 
+This method illustrates a query without using of the indexes.
 
-This method illustrates the use of indexes
+The following query selects documents and returns a list of orders from the stores.orders collection where the city matches the paramenter and the tax is greater than 50. 
 
-The following example first lists out all the indexes of the e- commerce database. 
 
 ```javascript
-for (Document index : collection.listIndexes()) {
-    System.out.println(index.toJson());
+List<Document> noIndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50)))
+				.into(new ArrayList<Document>());
 }
 ```
 
-The following query first runs the query without being indexed
-```javascript		
-Document noIndexQuery =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain",true)).first();
-```
+### GetShippingByCityWithIndex
 
+THis method illustrates the creation of an idex and a query with the use of the index.
 The following creates an index for 'state'
 ```javascript
 collection.createIndex(Indexes.ascending("shippingAddress.state"));
 ```
 
-The following lists out all the indexes of the e-commerce database. 
+After the creation of the index, the following query selects documents and returns a list of orders from the stores.orders collection where the city matches the paramenter and the tax is greater than 50. This returns the same list of orders but will use the index to query the database.
+
+
 ```javascript
-for (Document index : collection.listIndexes()) {
-	   System.out.println(index.toJson());
+List<Document> IndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50)))
+				.into(new ArrayList<Document>());
+}
+```
+
+## GetShippingByCityIndexSize
+
+The following method counts the number of indexes in the stores/orders collection and returns the total number of indexes. 
+```javascript
+try(MongoClient client = new MongoClient(clientUri))
+{
+	MongoDatabase database = client.getDatabase("stores");
+	MongoCollection<Document> collection = database.getCollection("orders");		
+		
+	String queryResult = null;
+	//check the current indexes
+	for (Document index : collection.listIndexes()) {
+	   line++;
+	   queryResult = index.toJson();
+	}
+}
+return line;
+```
+
+## DropIndex			
+The following method drops the index for 'state' 
+
+```javascript
+try(MongoClient client = new MongoClient(clientUri))
+{
+	MongoDatabase database = client.getDatabase("stores");
+	MongoCollection<Document> collection = database.getCollection("orders");		
+		
+	//drop the index
+	collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
 }
 ```			
-			
-The following drops the index for 'state'		
-```javascript
-collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
-```			
-	
+
+
+## Running the test
+The unit test cases are written using JUnit 4 framework. You can find them here:
+
+    .
+    ├── ...
+    ├── testsrc                    	# Source folder for all unit tests
+    │   ├── DataIndexTest.java        # Source file for all unit tests
+
