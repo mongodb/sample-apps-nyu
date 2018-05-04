@@ -40,7 +40,6 @@ public class DataIndex {
 		catch (Exception e) {
 			//log the exception
 			
-<<<<<<< HEAD
 			System.out.println("An exception occured");
 			System.out.println("Details:");
 			e.printStackTrace();
@@ -67,44 +66,9 @@ public class DataIndex {
 			collection.createIndex(Indexes.ascending("shippingAddress.state"));
 		
 			//runs a query with index
-			List<Document> noIndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).into(new ArrayList<Document>());
-			return noIndexQuery;
+			List<Document> IndexQuery = collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).into(new ArrayList<Document>());
+			return IndexQuery;
 		
-=======
-			//check the current indexes
-			for (Document index : collection.listIndexes()) {
-			    System.out.println(index.toJson());
-			}
-			
-			//runs a query without index
-			Document noIndexQuery =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain",true)).first();
-			System.out.println(noIndexQuery);
-				
-			//create index
-			collection.createIndex(Indexes.ascending("shippingAddress.state"));
-			//check the current indexes
-			for (Document index : collection.listIndexes()) {
-				   System.out.println(index.toJson());
-			}
-			
-			
-			//runs a query with index	
-			Document indexQuery =  collection.find(and(eq("shippingAddress.state",city),gt("tax",50))).modifiers(new Document("$explain", true)).first();
-			System.out.println(indexQuery);
-			
-			
-			//drop the index
-			collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
-			
-			
-			//checking what all are indexes
-			for (Document index : collection.listIndexes()) {
-			    System.out.println(index.toJson());
-			}
-			
-			
-			return null;
->>>>>>> b50f0132bd90d4173eb2ee998c3627d8cd5910c1
 			
 		}
 		catch (Exception e) {
@@ -139,8 +103,19 @@ public class DataIndex {
 			   line++;
 			   queryResult = index.toJson();
 			}
+			return line;
 		}
-		return line;
+		
+		
+		catch (Exception e) {
+			//log the exception
+			
+			System.out.println("An exception occured");
+			System.out.println("Details:");
+			e.printStackTrace();
+			return 0;
+							
+		}	
 	}
 	
 	public int dropIndex(String connectionString, String city)
@@ -158,9 +133,18 @@ public class DataIndex {
 		
 		//drop the index
 		collection.dropIndex(new BasicDBObject("shippingAddress.state", 1));
-	
-		}
 		return 0;
+		}
+
+		catch (Exception e) {
+			//log the exception
+			
+			System.out.println("An exception occured");
+			System.out.println("Details:");
+			e.printStackTrace();
+			return 0;
+							
+		}
 		
 	}
 }
